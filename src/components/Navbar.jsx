@@ -1,60 +1,52 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = () => {
-  return (
-    <nav style={styles.navbar}>
-      <div style={styles.logo}>
-        <Link to="/" style={styles.logoText}>MultiVendor</Link>
-      </div>
-      <ul style={styles.navLinks}>
-        <li><Link to="/" style={styles.link}>Home</Link></li>
-        <li><Link to="/products" style={styles.link}>Products</Link></li>
-        <li><Link to="/cart" style={styles.link}>Cart</Link></li>
-       
-        <li><Link to="/login" style={styles.button}>Login</Link></li>
-        
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
-      </ul>
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#4A6CF7', padding: '12px 30px' }}>
+      <div className="container-fluid">
+        <Link className="navbar-brand fw-bold" to="/" style={{ color: '#fff', fontSize: '24px' }}>MultiVendor</Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul className="navbar-nav gap-3">
+            <li className="nav-item">
+              <Link className="nav-link text-white" to="/">Home</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white" to="/products">Products</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white" to="/cart">Cart</Link>
+            </li>
+            {token ? (
+              <li className="nav-item">
+                <button className="btn btn-warning text-white fw-semibold" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <Link className="btn btn-warning text-white fw-semibold" to="/login">
+                  Login
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 };
 
 export default Navbar;
-
-const styles = {
-  navbar: {
-    backgroundColor: '#4A6CF7',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '15px 40px',
-  },
-  logo: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-  },
-  logoText: {
-    color: '#ffffff',
-    textDecoration: 'none',
-  },
-  navLinks: {
-    display: 'flex',
-    listStyle: 'none',
-    gap: '25px',
-    alignItems: 'center',
-  },
-  link: {
-    color: '#ffffff',
-    textDecoration: 'none',
-    fontSize: '18px',
-  },
-  button: {
-    backgroundColor: '#FF7F50',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    color: '#fff',
-    textDecoration: 'none',
-    fontWeight: '500',
-  },
-};

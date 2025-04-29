@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate  , Link} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,6 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-
       const { role, token, message } = response.data;
       setMessage(message);
 
@@ -26,7 +25,6 @@ const Login = () => {
       } else if (role === 'seller') {
         navigate('/seller-dashboard');
       }
-      
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
     }
@@ -57,15 +55,13 @@ const Login = () => {
       {message && <p style={styles.message}>{message}</p>}
 
       <p style={styles.registerLink}>
-      Don't have an account? <Link to="/register" style={{ color: '#4A6CF7' }}>Sign Up</Link>
-    </p>
+        Don't have an account? <Link to="/register" style={{ color: '#4A6CF7' }}>Sign Up</Link>
+      </p>
     </div>
   );
 };
 
 export default Login;
-
-
 
 // CSS
 const styles = {

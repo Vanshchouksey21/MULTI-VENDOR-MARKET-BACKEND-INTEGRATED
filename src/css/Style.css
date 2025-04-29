@@ -1,0 +1,105 @@
+/* Custom CSS for Header/Navbar */
+
+/* Navbar styling */
+.navbar {
+    background-color: #4A6CF7 !important; /* Royal Blue */
+    transition: background-color 0.3s ease;
+  }
+  
+  .navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #F8F9FC; /* Light Grey/Off-White */
+  }
+  
+  .navbar .navbar-brand:hover {
+    color: #FF7F50; /* Bright Orange */
+  }
+  
+  .navbar .navbar-nav .nav-link {
+    color: #F8F9FC; /* Light Grey/Off-White */
+    font-size: 1.1rem;
+    margin-right: 15px;
+  }
+  
+  .navbar .navbar-nav .nav-link:hover {
+    color: #FF7F50; /* Bright Orange */
+  }
+  
+  .navbar .navbar-toggler {
+    background-color: #FF7F50; /* Bright Orange */
+  }
+  
+  .navbar .navbar-toggler-icon {
+    background-color: #F8F9FC; /* Light Grey/Off-White */
+  }
+  
+  .navbar .navbar-collapse {
+    background-color: #4A6CF7; /* Royal Blue */
+  }
+  
+  .navbar .navbar-collapse .nav-link {
+    color: #F8F9FC; /* Light Grey/Off-White */
+  }
+  
+  /* Search Form Styling */
+  .form-control {
+    background-color: #D5E6FB; /* Soft Sky Blue */
+    border: 1px solid #D5E6FB; /* Soft Sky Blue */
+    color: #333333; /* Dark Charcoal */
+  }
+  
+  .form-control:focus {
+    background-color: #D5E6FB; /* Soft Sky Blue */
+    border-color: #FF7F50; /* Bright Orange */
+  }
+  
+  button[type="submit"] {
+    background-color: #FF7F50; /* Bright Orange */
+    border-color: #FF7F50; /* Bright Orange */
+    color: #F8F9FC; /* Light Grey/Off-White */
+    font-size: 1rem;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #333333; /* Dark Charcoal */
+    border-color: #333333; /* Dark Charcoal */
+  }
+  
+  /* Cart Badge Styling */
+  .badge-danger {
+    background-color: #FF7F50; /* Bright Orange */
+    color: #333333; /* Dark Charcoal */
+  }
+  
+  /* NavDropdown Styling */
+  .nav-dropdown .dropdown-item {
+    color: #333333; /* Dark Charcoal */
+  }
+  
+  .nav-dropdown .dropdown-item:hover {
+    background-color: #D5E6FB; /* Soft Sky Blue */
+  }
+  
+  .navbar .navbar-nav .nav-link.active {
+    color: #FF7F50; /* Bright Orange */
+    font-weight: bold;
+  }
+  
+  /* Fix for when navbar scrolls */
+  .navbar.scrolled {
+    background-color: #333333 !important; /* Dark Charcoal */
+  }
+  
+  .navbar.scrolled .navbar-brand {
+    color: #F8F9FC; /* Light Grey/Off-White */
+  }
+  
+  .navbar.scrolled .navbar-nav .nav-link {
+    color: #F8F9FC; /* Light Grey/Off-White */
+  }
+  
+  .navbar.scrolled .navbar-nav .nav-link:hover {
+    color: #FF7F50; /* Bright Orange */
+  }
+  

@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import ProductDetails from './pages/ProductDetail';
 import Register from './pages/Register';
 import SellerDashboard from './pages/SellerDashboard';
+import CartPage from './pages/Cart';
 function App() {
   return (
     <Router>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<CartPage />} />
       
 <Route path="/seller-dashboard" element={<SellerDashboard />} />
       </Routes>
