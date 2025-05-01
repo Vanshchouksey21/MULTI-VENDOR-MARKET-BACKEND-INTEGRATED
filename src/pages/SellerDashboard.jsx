@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import AddProduct from './AddProduct';
 import Myp from './Myp';
 import DashboardHome from './DashboardHome';
+import UpdateProducts from './UpdateProducts'; // import this at top
+
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -12,11 +14,14 @@ const SellerDashboard = () => {
         return <AddProduct />;
       case 'my':
         return <Myp />;
+      case 'update':
+        return <UpdateProducts />; // add this
       case 'dashboard':
       default:
         return <DashboardHome />;
     }
   };
+  
 
   return (
     <div style={styles.wrapper}>
@@ -42,6 +47,12 @@ const SellerDashboard = () => {
           >
             📦 My Products
           </li>
+          <li
+  onClick={() => setActiveTab('update')}
+  style={activeTab === 'update' ? styles.activeItem : styles.navItem}
+>
+  ✏️ Update Products
+</li>
         </ul>
       </div>
 

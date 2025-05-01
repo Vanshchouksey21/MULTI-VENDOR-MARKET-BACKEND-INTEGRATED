@@ -1,23 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const DashboardHome = () => {
+  const [stats, setStats] = useState({ products: 0, earnings: 0 });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');  // Get the token from local storage
+    const userId = localStorage.getItem('userId');  // Get the user ID from local storage
+
+    if (token && userId) {
+      axios.get(`http://localhost:5000/products/seller/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,  // Send token in headers for authentication
+        },
+      })
+        .then(res => {
+          const products = res.data;
+          setStats({
+            products: products.length,
+            earnings: products.reduce((sum, p) => sum + p.price, 0),
+          });
+        })
+        .catch(err => console.error('Error fetching products:', err));
+    } else {
+      console.error('User not authenticated');
+    }
+  }, []);
+
   return (
     <div style={styles.container}>
       <h2>Welcome to Your Seller Dashboard!</h2>
-      <p>Use the sidebar to add products or manage your listings.</p>
       <div style={styles.statsContainer}>
-        <div style={styles.card}>
-          <h4>Total Products</h4>
-          <p>12</p>
-        </div>
-        <div style={styles.card}>
-          <h4>Pending Orders</h4>
-          <p>4</p>
-        </div>
-        <div style={styles.card}>
-          <h4>Earnings</h4>
-          <p>₹18,500</p>
-        </div>
+        <div style={styles.card}><h4>Total Products</h4><p>{stats.products}</p></div>
+        <div style={styles.card}><h4>Earnings</h4><p>₹{stats.earnings}</p></div>
       </div>
     </div>
   );

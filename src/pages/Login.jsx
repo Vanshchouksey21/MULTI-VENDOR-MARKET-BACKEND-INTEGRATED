@@ -13,17 +13,29 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      const { role, token, message } = response.data;
+
+      const { role, token, message, userId } = response.data;
       setMessage(message);
 
-      // Save token to localStorage
+      // ✅ Save token and userId to localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('userEmail', email);
+      
 
       // Navigate based on role
       if (role === 'buyer') {
         navigate('/home');
       } else if (role === 'seller') {
-        navigate('/seller-dashboard');
+        navigate('/seller-dashboard'); const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+
+      const { role, token, message, userId } = response.data;
+      setMessage(message);
+
+      // ✅ Save token and userId to localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+
       }
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
