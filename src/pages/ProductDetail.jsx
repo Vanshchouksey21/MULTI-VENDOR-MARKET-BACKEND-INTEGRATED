@@ -1,91 +1,134 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const ProductDetails = () => {
-  const { id } = useParams(); // URL se product id milegi
+const UpdateProduct = () => {
+  const { id } = useParams(); // Get product ID from route
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [category, setCategory] = useState('');
+  const [image, setImage] = useState(null);
+  const [existingImage, setExistingImage] = useState('');
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/products/${id}`);
+        const product = res.data;
+        setTitle(product.title);
+        setPrice(product.price);
+        setCategory(product.category);
+        setExistingImage(product.image);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to fetch product details.');
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!title || !price || !category) {
+      alert('Please fill all fields.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('price', price);
+    formData.append('category', category);
+    if (image) formData.append('image', image); // Only append image if updated
+
+    try {
+      await axios.put(`http://localhost:5000/products/${id}`, formData);
+      alert('✅ Product updated successfully!');
+      navigate('/dashboard/my-products'); // Redirect to product list
+    } catch (err) {
+      console.error(err);
+      alert('❌ Failed to update product.');
+    }
+  };
 
   return (
-    <>
-      <Navbar />
-
-      <section style={styles.container}>
-        {/* Product Image */}
-        <div style={styles.imageSection}>
+    <div style={styles.container}>
+      <h3 style={styles.heading}>Update Product</h3>
+      <form onSubmit={handleUpdate} style={styles.form}>
+        <input
+          type="text"
+          placeholder="Product Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+          style={styles.input}
+        />
+        {existingImage && (
           <img
-            src="https://via.placeholder.com/400"
-            alt="Product"
-            style={styles.image}
+            src={`http://localhost:5000/uploads/${existingImage}`}
+            alt="Current"
+            style={{ width: '150px', marginTop: '10px', borderRadius: '8px' }}
           />
-        </div>
-
-        {/* Product Info */}
-        <div style={styles.infoSection}>
-          <h1 style={styles.title}>Product Name</h1>
-          <p style={styles.price}>$99.99</p>
-          <p style={styles.description}>
-            This is a detailed description of the product. It explains the features, specifications, and benefits.
-          </p>
-          <button style={styles.button}>Add to Cart</button>
-        </div>
-      </section>
-
-      <Footer />
-    </>
+        )}
+        <button type="submit" style={styles.button}>Update Product</button>
+      </form>
+    </div>
   );
 };
 
-export default ProductDetails;
-
 const styles = {
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    padding: '50px 20px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8F9FC',
-    minHeight: '80vh',
+    backgroundColor: '#ffffff',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
   },
-  imageSection: {
-    flex: '1',
-    minWidth: '300px',
-    textAlign: 'center',
-  },
-  image: {
-    width: '100%',
-    maxWidth: '400px',
-    borderRadius: '10px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-  },
-  infoSection: {
-    flex: '1',
-    minWidth: '300px',
-    padding: '20px',
-  },
-  title: {
-    fontSize: '36px',
-    color: '#333333',
-    marginBottom: '15px',
-  },
-  price: {
-    fontSize: '28px',
-    color: '#4A6CF7',
+  heading: {
+    fontSize: '24px',
     marginBottom: '20px',
+    color: '#333',
   },
-  description: {
-    fontSize: '18px',
-    color: '#555',
-    marginBottom: '30px',
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  input: {
+    padding: '10px 14px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
   },
   button: {
-    backgroundColor: '#FF7F50',
+    padding: '12px',
+    backgroundColor: '#4A6CF7',
     color: '#fff',
-    padding: '12px 24px',
-    borderRadius: '6px',
+    fontWeight: 'bold',
     border: 'none',
-    fontSize: '18px',
+    borderRadius: '6px',
     cursor: 'pointer',
+    fontSize: '16px',
   },
 };
+
+export default UpdateProduct;

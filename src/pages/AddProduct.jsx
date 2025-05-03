@@ -9,8 +9,15 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!title || !price || !category || !image) {
       alert('Please fill all fields.');
+      return;
+    }
+
+    const sellerId = localStorage.getItem('userId');
+    if (!sellerId) {
+      alert('User not authenticated. Please log in.');
       return;
     }
 
@@ -19,6 +26,7 @@ const AddProduct = () => {
     formData.append('price', price);
     formData.append('category', category);
     formData.append('image', image);
+    formData.append('seller', sellerId); // ✅ Add seller ID
 
     try {
       const res = await axios.post('http://localhost:5000/products/create', formData);
@@ -37,10 +45,32 @@ const AddProduct = () => {
     <div style={styles.container}>
       <h3 style={styles.heading}>Add New Product</h3>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <input type="text" placeholder="Product Title" value={title} onChange={(e) => setTitle(e.target.value)} style={styles.input} />
-        <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} style={styles.input} />
-        <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} style={styles.input} />
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} style={styles.input} />
+        <input
+          type="text"
+          placeholder="Product Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+          style={styles.input}
+        />
         <button type="submit" style={styles.button}>Add Product</button>
       </form>
     </div>
@@ -83,3 +113,4 @@ const styles = {
     fontSize: '16px',
   },
 };
+  

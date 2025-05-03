@@ -6,8 +6,10 @@ const Myp = () => {
 
   const fetchMyProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/products/all'); // Filter by seller if needed
-      setProducts(res.data);
+      const res = await axios.get('http://localhost:5000/products/all');
+      const sellerId = localStorage.getItem('userId');
+      const myProducts = res.data.filter(product => product.seller === sellerId);
+      setProducts(myProducts);
     } catch (err) {
       console.error(err);
       alert('Failed to fetch products.');
@@ -66,3 +68,4 @@ const styles = {
     marginBottom: '10px',
   },
 };
+  

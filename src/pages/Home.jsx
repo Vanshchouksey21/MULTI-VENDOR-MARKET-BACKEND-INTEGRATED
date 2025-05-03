@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
-import img from '../images/ChatGPT Image Apr 29, 2025, 07_11_04 PM.png';
-import img2 from '../images/My ChatGPT image.png';
+import bannerImage from '../images/ChatGPT Image May 2, 2025, 11_32_15 PM.png'; // Adjust the path as necessary
+
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,28 +43,12 @@ const Home = () => {
       <Navbar />
 
       {/* Carousel */}
-      <div className="carousel slide mt-5" id="carouselExample" data-bs-ride="carousel" data-bs-interval="3000">
-        <div className="carousel-inner">
-          {[img, img2, 'https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/11980ec333f6aa03.jpg?q=20'].map((src, index) => (
-            <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-              <img
-                src={src}
-                alt={`Slide ${index + 1}`}
-                className="d-block w-100"
-                style={{ height: '400px', objectFit: 'cover' }}
-              />
-            </div>
-          ))}
-        </div>
-        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-          <span className="carousel-control-prev-icon"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-          <span className="carousel-control-next-icon"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
+      <section className="hero-section text-white text-center d-flex align-items-center justify-content-center flex-column">
+  <h1 className="display-6 fw-bold mb-2">Welcome to MultiVendor</h1>
+  <p className="lead mb-3">Top deals from multiple trusted sellers</p>
+  <a href="#products" className="btn btn-warning fw-semibold px-4 py-2">Shop Now</a>
+</section>
+
 
       {/* Product Grid */}
       <section style={styles.container}>
@@ -117,5 +101,8 @@ const styles = {
     fontSize: '2.5rem',
     marginBottom: '40px',
     color: '#333',
+  
   },
+  
+  
 };
