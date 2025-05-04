@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'; // import useNavigate
 import AddProduct from './AddProduct';
 import Myp from './Myp';
 import DashboardHome from './DashboardHome';
-import UpdateProducts from './UpdateProducts';
 import { Navbar } from 'react-bootstrap';
 
 const SellerDashboard = () => {
@@ -57,12 +56,7 @@ const SellerDashboard = () => {
             >
               📦 My Products
             </li>
-            <li
-              onClick={() => setActiveTab('update')}
-              style={activeTab === 'update' ? styles.activeItem : styles.navItem}
-            >
-              ✏️ Update Products
-            </li>
+           
           </ul>
 
           {/* Logout Button */}

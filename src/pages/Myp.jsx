@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Card, Col, Row, Button } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Myp = () => {
   const [products, setProducts] = useState([]);
@@ -12,7 +15,49 @@ const Myp = () => {
       setProducts(myProducts);
     } catch (err) {
       console.error(err);
-      alert('Failed to fetch products.');
+      toast.error('❌ Failed to fetch products.');
+    }
+  };
+
+  const confirmDeleteToast = (productId) => {
+    const toastId = toast.info(
+      ({ closeToast }) => (
+        <div>
+          <p style={{ marginBottom: '10px' }}>Are you sure you want to delete this product?</p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <Button variant="secondary" size="sm" onClick={closeToast}>
+              No
+            </Button>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => {
+                handleDelete(productId);
+                toast.dismiss(toastId);
+              }}
+            >
+              Yes
+            </Button>
+          </div>
+        </div>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+        position: 'top-center',
+      }
+    );
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/products/${id}`);
+      setProducts(products.filter(product => product._id !== id));
+      toast.success('✅ Product deleted successfully.');
+    } catch (err) {
+      console.error(err);
+      toast.error('❌ Failed to delete product.');
     }
   };
 
@@ -21,26 +66,43 @@ const Myp = () => {
   }, []);
 
   return (
-    <div>
-      <h3 style={{ marginBottom: '20px', color: '#333' }}>My Products</h3>
-      <div style={styles.grid}>
+    <div style={styles.container}>
+      <h3 style={styles.heading}>My Products</h3>
+      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
         {products.map((product) => (
-          <div key={product._id} style={styles.card}>
-            <img
-              src={
-                product.image === 'noimage.jpg'
+          <Col key={product._id}>
+            <Card style={styles.card}>
+              <Card.Img
+                variant="top"
+                src={product.image === 'noimage.jpg'
                   ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                  : `http://localhost:5000/uploads/${product.image}`
-              }
-              alt={product.title}
-              style={styles.image}
-            />
-            <h5>{product.title}</h5>
-            <p>₹{product.price}</p>
-            <p style={{ fontSize: '14px', color: '#777' }}>{product.category}</p>
-          </div>
+                  : `http://localhost:5000/uploads/${product.image}`}
+                alt={product.title}
+                style={styles.image}
+              />
+              <Card.Body>
+                <Card.Title style={styles.title}>{product.title}</Card.Title>
+                <Card.Text style={styles.price}>₹{product.price}</Card.Text>
+                <Card.Text style={styles.category}>{product.category}</Card.Text>
+                <Button variant="danger" onClick={() => confirmDeleteToast(product._id)}>
+                  Delete
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
         ))}
-      </div>
+      </Row>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
@@ -48,24 +110,37 @@ const Myp = () => {
 export default Myp;
 
 const styles = {
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '20px',
+  container: {
+    padding: '30px',
+    backgroundColor: '#f8f9fc',
+  },
+  heading: {
+    marginBottom: '30px',
+    color: '#333',
+    fontSize: '28px',
+    fontWeight: '600',
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    padding: '15px',
-    textAlign: 'center',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+    borderRadius: '12px',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
   },
   image: {
-    width: '100%',
-    height: '180px',
+    height: '200px',
     objectFit: 'cover',
-    borderRadius: '6px',
-    marginBottom: '10px',
+    borderRadius: '8px',
+  },
+  title: {
+    fontSize: '18px',
+    fontWeight: '500',
+    color: '#333',
+  },
+  price: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#4A6CF7',
+  },
+  category: {
+    fontSize: '14px',
+    color: '#777',
   },
 };
-  

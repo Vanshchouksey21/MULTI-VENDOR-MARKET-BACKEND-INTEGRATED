@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateProduct = () => {
-  const { id } = useParams(); // Get product ID from route
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -41,12 +41,12 @@ const UpdateProduct = () => {
     formData.append('title', title);
     formData.append('price', price);
     formData.append('category', category);
-    if (image) formData.append('image', image); // Only append image if updated
+    if (image) formData.append('image', image);
 
     try {
       await axios.put(`http://localhost:5000/products/${id}`, formData);
       alert('✅ Product updated successfully!');
-      navigate('/dashboard/my-products'); // redirect to product list
+      navigate('/dashboard/my-products');
     } catch (err) {
       console.error(err);
       alert('❌ Failed to update product.');
@@ -57,10 +57,32 @@ const UpdateProduct = () => {
     <div style={styles.container}>
       <h3 style={styles.heading}>Update Product</h3>
       <form onSubmit={handleUpdate} style={styles.form}>
-        <input type="text" placeholder="Product Title" value={title} onChange={(e) => setTitle(e.target.value)} style={styles.input} />
-        <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} style={styles.input} />
-        <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} style={styles.input} />
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} style={styles.input} />
+        <input
+          type="text"
+          placeholder="Product Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+          style={styles.input}
+        />
         {existingImage && (
           <img
             src={`http://localhost:5000/uploads/${existingImage}`}
@@ -82,6 +104,9 @@ const styles = {
     padding: '30px',
     borderRadius: '8px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    maxWidth: '500px',
+    margin: 'auto',
+    marginTop: '40px',
   },
   heading: {
     fontSize: '24px',

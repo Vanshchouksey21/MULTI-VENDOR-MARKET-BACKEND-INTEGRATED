@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import SellerDashboard from './pages/SellerDashboard';
 import CartPage from './pages/Cart';
 import BuyerDashboard from './pages/BuyerDashboard';
+import Smartphone from './pages/Smartphone';
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+        <Route path="/products/smartphones" element={<Smartphone/>} />
       
 <Route path="/seller-dashboard" element={<SellerDashboard />} />
       </Routes>

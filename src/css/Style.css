@@ -114,3 +114,24 @@
   text-align: center;
 }
 
+
+
+@keyframes bannerSwap {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
+
+.banner-animation {
+  animation: bannerSwap 8s infinite ease-in-out;
+  transition: all 1s ease-in-out;
+}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddProduct = () => {
   const [title, setTitle] = useState('');
@@ -11,13 +13,13 @@ const AddProduct = () => {
     e.preventDefault();
 
     if (!title || !price || !category || !image) {
-      alert('Please fill all fields.');
+      toast.error('⚠️ Please fill all fields.');
       return;
     }
 
     const sellerId = localStorage.getItem('userId');
     if (!sellerId) {
-      alert('User not authenticated. Please log in.');
+      toast.error('❌ User not authenticated. Please log in.');
       return;
     }
 
@@ -26,18 +28,18 @@ const AddProduct = () => {
     formData.append('price', price);
     formData.append('category', category);
     formData.append('image', image);
-    formData.append('seller', sellerId); // ✅ Add seller ID
+    formData.append('seller', sellerId);
 
     try {
-      const res = await axios.post('http://localhost:5000/products/create', formData);
-      alert('✅ Product added successfully!');
+      await axios.post('http://localhost:5000/products/create', formData);
+      toast.success(' Product added successfully!');
       setTitle('');
       setPrice('');
       setCategory('');
       setImage(null);
     } catch (error) {
       console.error(error);
-      alert('❌ Failed to upload product.');
+      toast.error('❌ Failed to upload product.');
     }
   };
 
@@ -73,6 +75,17 @@ const AddProduct = () => {
         />
         <button type="submit" style={styles.button}>Add Product</button>
       </form>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
@@ -113,4 +126,3 @@ const styles = {
     fontSize: '16px',
   },
 };
-  
