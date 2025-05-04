@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Col, Row, Button } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Card, Col, Row, Button, Modal, Form, Container } from 'react-bootstrap';
 
 const Myp = () => {
   const [products, setProducts] = useState([]);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    price: '',
+    category: '',
+    stock: '',
+  });
 
   const fetchMyProducts = async () => {
     try {
@@ -15,49 +21,7 @@ const Myp = () => {
       setProducts(myProducts);
     } catch (err) {
       console.error(err);
-      toast.error('❌ Failed to fetch products.');
-    }
-  };
-
-  const confirmDeleteToast = (productId) => {
-    const toastId = toast.info(
-      ({ closeToast }) => (
-        <div>
-          <p style={{ marginBottom: '10px' }}>Are you sure you want to delete this product?</p>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-            <Button variant="secondary" size="sm" onClick={closeToast}>
-              No
-            </Button>
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={() => {
-                handleDelete(productId);
-                toast.dismiss(toastId);
-              }}
-            >
-              Yes
-            </Button>
-          </div>
-        </div>
-      ),
-      {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-        position: 'top-center',
-      }
-    );
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/products/${id}`);
-      setProducts(products.filter(product => product._id !== id));
-      toast.success('✅ Product deleted successfully.');
-    } catch (err) {
-      console.error(err);
-      toast.error('❌ Failed to delete product.');
+      alert('Failed to fetch products.');
     }
   };
 
@@ -65,82 +29,143 @@ const Myp = () => {
     fetchMyProducts();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    try {
+      await axios.delete(`http://localhost:5000/products/${id}`);
+      setProducts(products.filter(product => product._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete product.');
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setSelectedProduct(product);
+    setFormData({
+      title: product.title,
+      price: product.price,
+      category: product.category,
+      stock: product.stock || '',
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:5000/products/${selectedProduct._id}`, formData);
+      setShowEditModal(false);
+      fetchMyProducts();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update product.');
+    }
+  };
+
   return (
-    <div style={styles.container}>
-      <h3 style={styles.heading}>My Products</h3>
-      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+    <Container className="py-4">
+      <h3 className="mb-4 text-center text-primary fw-bold">My Products</h3>
+      <Row className="g-4">
         {products.map((product) => (
-          <Col key={product._id}>
-            <Card style={styles.card}>
+          <Col xs={12} sm={6} md={4} lg={3} key={product._id}>
+            <Card className="h-100 shadow-sm">
               <Card.Img
                 variant="top"
-                src={product.image === 'noimage.jpg'
-                  ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                  : `http://localhost:5000/uploads/${product.image}`}
+                src={
+                  product.image === 'noimage.jpg'
+                    ? 'https://via.placeholder.com/300x200.png?text=No+Image'
+                    : `http://localhost:5000/uploads/${product.image}`
+                }
                 alt={product.title}
-                style={styles.image}
+                style={{ height: '200px', objectFit: 'cover' }}
               />
-              <Card.Body>
-                <Card.Title style={styles.title}>{product.title}</Card.Title>
-                <Card.Text style={styles.price}>₹{product.price}</Card.Text>
-                <Card.Text style={styles.category}>{product.category}</Card.Text>
-                <Button variant="danger" onClick={() => confirmDeleteToast(product._id)}>
-                  Delete
-                </Button>
+              <Card.Body className="d-flex flex-column justify-content-between">
+                <div>
+                  <Card.Title className="text-dark fw-semibold">{product.title}</Card.Title>
+                  <Card.Text className="text-success fw-bold">₹{product.price}</Card.Text>
+                  <Card.Text className="text-muted">Category: {product.category}</Card.Text>
+                  <Card.Text className="text-muted">Stock: {product.stock ?? 'N/A'}</Card.Text>
+                </div>
+                <div className="mt-3 d-flex gap-2">
+                  <Button
+                    variant="outline-primary"
+                    className="w-50"
+                    onClick={() => handleEditClick(product)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    className="w-50"
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </div>
+
+      {/* Edit Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleEditSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                name="title"
+                value={formData.title}
+                onChange={handleEditChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price (₹)</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleEditChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                name="category"
+                value={formData.category}
+                onChange={handleEditChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleEditChange}
+                required
+              />
+            </Form.Group>
+            <Button variant="success" type="submit" className="w-100">
+              Save Changes
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </Container>
   );
 };
 
 export default Myp;
-
-const styles = {
-  container: {
-    padding: '30px',
-    backgroundColor: '#f8f9fc',
-  },
-  heading: {
-    marginBottom: '30px',
-    color: '#333',
-    fontSize: '28px',
-    fontWeight: '600',
-  },
-  card: {
-    borderRadius: '12px',
-    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-  },
-  image: {
-    height: '200px',
-    objectFit: 'cover',
-    borderRadius: '8px',
-  },
-  title: {
-    fontSize: '18px',
-    fontWeight: '500',
-    color: '#333',
-  },
-  price: {
-    fontSize: '16px',
-    fontWeight: 'bold',
-    color: '#4A6CF7',
-  },
-  category: {
-    fontSize: '14px',
-    color: '#777',
-  },
-};

@@ -1,14 +1,17 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem } from '../pages/cartSlice'; // Assuming removeItem action exists
-import Navbar from '../components/Navbar'; // Import Navbar component
+import { removeItem, increaseQuantity, decreaseQuantity } from '../pages/cartSlice';
+import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize the navigate function
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeItem(id));
+  // Handle Proceed to Checkout
+  const handleProceedToCheckout = () => {
+    navigate('/checkout'); // Redirect to the checkout page
   };
 
   return (
@@ -24,24 +27,48 @@ const Cart = () => {
               <div key={item._id} className="d-flex justify-content-between align-items-center border-bottom py-3">
                 <div className="d-flex align-items-center">
                   <img
-                    src={item.image === 'noimage.jpg' ? 'https://via.placeholder.com/150x100.png?text=No+Image' : `http://localhost:5000/uploads/${item.image}`}
+                    src={item.image === 'noimage.jpg'
+                      ? 'https://via.placeholder.com/150x100.png?text=No+Image'
+                      : `http://localhost:5000/uploads/${item.image}`}
                     alt={item.title}
                     style={{ width: '100px', height: 'auto', objectFit: 'contain' }}
                   />
                   <div className="ms-3">
                     <h5>{item.title}</h5>
                     <p>₹{item.price}</p>
-                    <p>Quantity: {item.quantity}</p>
+                    <div className="d-flex align-items-center">
+                      <button
+                        className="btn btn-outline-secondary btn-sm me-2"
+                        onClick={() => dispatch(decreaseQuantity(item._id))}
+                        disabled={item.quantity === 1}
+                      >
+                        -
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        className="btn btn-outline-secondary btn-sm ms-2"
+                        onClick={() => dispatch(increaseQuantity(item._id))}
+                        disabled={item.quantity === item.stock}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <small className="text-muted">Available: {item.stock}</small>
                   </div>
                 </div>
-                <button className="btn btn-danger" onClick={() => handleRemoveItem(item._id)}>
+                <button className="btn btn-danger" onClick={() => dispatch(removeItem(item._id))}>
                   Remove
                 </button>
               </div>
             ))}
             <div className="mt-4">
-              <h4>Total: ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</h4>
-              <button className="btn btn-success">Proceed to Checkout</button>
+              <h4>
+                Total: ₹
+                {cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
+              </h4>
+              <button className="btn btn-success" onClick={handleProceedToCheckout}>
+                Proceed to Checkout
+              </button>
             </div>
           </div>
         )}

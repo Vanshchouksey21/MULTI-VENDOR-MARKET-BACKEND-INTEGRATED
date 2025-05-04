@@ -7,6 +7,8 @@ import SellerDashboard from './pages/SellerDashboard';
 import CartPage from './pages/Cart';
 import BuyerDashboard from './pages/BuyerDashboard';
 import Smartphone from './pages/Smartphone';
+import Checkout from './pages/Checkout';
+
 function App() {
   return (
     <Router>
@@ -20,6 +22,8 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
         <Route path="/products/smartphones" element={<Smartphone/>} />
+        <Route path="/checkout" element={<Checkout />} />
+        
       
 <Route path="/seller-dashboard" element={<SellerDashboard />} />
       </Routes>
