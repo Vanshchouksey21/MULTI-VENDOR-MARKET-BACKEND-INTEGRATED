@@ -12,6 +12,7 @@ import SearchResults from './pages/SearchResults';
 
 import Fashion from './pages/Fashion';
 import Beauty from './pages/Beauty';
+import Food from './pages/Food';
 
 function App() {
   return (
@@ -28,8 +29,10 @@ function App() {
         <Route path="/products/electronics" element={<Smartphone/>} />
         <Route path="/products/fashion" element={<Fashion/>} />
         <Route path="/products/Beauty" element={<Beauty/>} />
+        <Route path="/products/Food" element={<Food />} /> 
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/products/Food" element={<Food />} /> 
         
         
       

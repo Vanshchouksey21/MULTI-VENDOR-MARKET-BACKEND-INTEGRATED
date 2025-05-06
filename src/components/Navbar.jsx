@@ -54,7 +54,7 @@ const Navbar = () => {
                 <li><Link className="dropdown-item" to="/products/Electronics">Electronics</Link></li>
                 <li><Link className="dropdown-item" to="/products/fashion ">Fashion</Link></li>
                 <li><Link className="dropdown-item" to="/products/Beauty">Health & Beauty</Link></li>
-                <li><Link className="dropdown-item" to="/products/accessories">Accessories</Link></li>
+                <li><Link className="dropdown-item" to="/products/food">Food & Beverages</Link></li>
               </ul>
             </li>
 

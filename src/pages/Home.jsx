@@ -11,7 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import logo from '../images/ChatGPT Image May 5, 2025, 08_11_37 PM.png';
-
+import fashion from "../images/ChatGPT Image May 6, 2025, 10_32_02 PM.png"
+import electronics from "../images/ChatGPT Image May 6, 2025, 10_32_05 PM.png"
+import beauty from "../images/ChatGPT Image May 6, 2025, 10_32_00 PM.png"
+import food from "../images/ChatGPT Image May 6, 2025, 10_31_58 PM.png"
 const Home = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
@@ -81,6 +84,7 @@ const Home = () => {
         <a href="#products" className="btn btn-warning fw-semibold px-5 py-2 rounded-pill fs-5">Explore Now</a>
       </section>
 
+     
       {/* Features Section */}
       <section style={styles.featuresSection} className="text-center py-5">
         <Row className="g-4">
@@ -107,6 +111,62 @@ const Home = () => {
           </Col>
         </Row>
       </section>
+
+       {/* Shop  */}
+       <section>
+       <h2 className="text-center mt-5" data-aos="fade-up">Shop by Category</h2>
+       <container className="my-4">
+       <Row className="justify-content-center text-center">
+       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in">
+       <div onClick={() => navigate("/products/Electronics")} style={{ cursor: "pointer" }}>
+        <img src={fashion} 
+        alt="Fashion"
+        className="rounded-circle mb-2"
+        style={{ width: "180px", height: "180px", objectFit: "cover" }}
+         />
+          <h3>Fashion</h3>
+        </div>
+       </Col>
+       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+       <div onClick={() => navigate("/products/Electronics")} style={{ cursor: "pointer" }}>
+                <img
+                  src={electronics} // Replace with your image path
+                  alt="Electronics"
+                  className="rounded-circle mb-2"
+                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
+                />
+                <h3>Electronics</h3>
+              </div>
+       </Col>
+
+       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+       <div onClick={() => navigate("/products/food")} style={{ cursor: "pointer" }}>
+                <img
+                  src={food} // Replace with your image path
+                  alt="Food & Beverages "
+                  className="rounded-circle mb-2"
+                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
+                />
+                <h3>Food & Beverages </h3>
+              </div>
+       </Col>
+
+       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+       <div onClick={() => navigate("products/Beauty")} style={{ cursor: "pointer" }}>
+                <img
+                  src={beauty} // Replace with your image path
+                  alt="Health & Beauty"
+                  className="rounded-circle mb-2"
+                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
+                />
+                <h3>Health & Beauty</h3>
+              </div>
+       </Col>
+       </Row>
+
+       </container>
+      </section>
+     
 
       {/* Product Grid */}
       <section id="products" style={styles.container}>
@@ -179,6 +239,17 @@ const styles = {
   },
   featuresSection: {
     backgroundColor: '#F8F9FC',
+  },
+  container: {
+    padding: '50px 20px',
+    backgroundColor: '#F8F9FC',
+    minHeight: '80vh',
+  },
+  heading: {
+    textAlign: 'center',
+    fontSize: '2.5rem',
+    marginBottom: '40px',
+    color: '#333',
   },
   card: {
     borderRadius: '10px',

@@ -9,9 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // Adjust the path as necessary
 
-
-const Fashion = () => {
+const Food = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
@@ -20,10 +20,10 @@ const Fashion = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:5000/products/all');
-        const fashionProducts = res.data.filter((product) =>
-          product.category.toLowerCase().includes('fashion')
+        const foodProducts = res.data.filter((product) =>
+          product.category.toLowerCase().includes('food & beverages')
         );
-        setProducts(fashionProducts);
+        setProducts(foodProducts);
       } catch (error) {
         console.error('Error fetching products', error);
       }
@@ -45,12 +45,9 @@ const Fashion = () => {
     <>
       <Navbar />
       
-
-   
-
-      {/* Product Grid for Fashion Items */}
+      {/* Product Grid for Food Items */}
       <section style={styles.container}>
-        <h2 style={styles.heading}>👗 Explore Our Fashion Collection</h2>
+        <h2 style={styles.heading}>🍔 Explore Our Food Collection</h2>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
@@ -90,7 +87,7 @@ const Fashion = () => {
   );
 };
 
-export default Fashion;
+export default Food;
 
 const styles = {
   container: {
