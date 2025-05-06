@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Col, Row } from 'react-bootstrap';
@@ -11,12 +10,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import logo from '../images/ChatGPT Image May 5, 2025, 08_11_37 PM.png';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
+
+  const isLoggedIn = localStorage.getItem('token'); // Auth check
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,6 +33,12 @@ const Home = () => {
   }, []);
 
   const handleAddToCart = (product) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to add items to your cart');
+      navigate('/login');
+      return;
+    }
+
     const exists = cartItems.find((item) => item._id === product._id);
     if (exists) {
       toast.error(`${product.title} is already in the cart!`);
@@ -41,6 +49,12 @@ const Home = () => {
   };
 
   const handleBuyNow = (product) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to buy items');
+      navigate('/login');
+      return;
+    }
+
     const exists = cartItems.find((item) => item._id === product._id);
     if (!exists) {
       dispatch(addItem(product));
@@ -54,10 +68,44 @@ const Home = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="hero-section text-white text-center d-flex align-items-center justify-content-center flex-column" style={styles.hero}>
-        <h1 className="display-6 fw-bold mb-2">Welcome to MultiVendor</h1>
-        <p className="lead mb-3">Top deals from multiple trusted sellers</p>
-        <a href="#products" className="btn btn-warning fw-semibold px-4 py-2">Shop Now</a>
+      <section style={styles.introSection} className="text-white text-center d-flex flex-column align-items-center justify-content-center">
+        <img 
+          src={logo}
+          alt="Shopping Hero"
+          style={styles.heroImage}
+          className="mb-4 rounded shadow"
+        />
+        <h1 className="display-4 fw-bold">Welcome to MultiVendor</h1>
+        <p className="lead mt-2 mb-4">India’s Most Trusted Marketplace</p>
+        <p className="fs-5 text-light mb-4">Explore exclusive deals, top-rated sellers, and seamless shopping—all in one place.</p>
+        <a href="#products" className="btn btn-warning fw-semibold px-5 py-2 rounded-pill fs-5">Explore Now</a>
+      </section>
+
+      {/* Features Section */}
+      <section style={styles.featuresSection} className="text-center py-5">
+        <Row className="g-4">
+          <Col md={4}>
+            <div className="p-4 shadow-sm bg-white rounded">
+              <img src="https://img.icons8.com/ios-filled/50/4A6CF7/shipped.png" alt="Shipping" />
+              <h5 className="mt-3 fw-bold">Free Shipping</h5>
+              <p className="text-muted">On all orders over ₹500</p>
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className="p-4 shadow-sm bg-white rounded">
+              <img src="https://img.icons8.com/ios-filled/50/4A6CF7/return.png" alt="Returns" />
+              <h5 className="mt-3 fw-bold">Easy Returns</h5>
+              <p className="text-muted">30-day return policy</p>
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className="p-4 shadow-sm bg-white rounded">
+              <img src="https://img.icons8.com/ios-filled/50/4A6CF7/security-checked.png" alt="Secure" />
+              <h5 className="mt-3 fw-bold">Secure Payment</h5>
+              <p className="text-muted">Protected by industry leaders</p>
+            </div>
+          </Col>
+        </Row>
       </section>
 
       {/* Product Grid */}
@@ -66,7 +114,7 @@ const Home = () => {
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
-              <Card className="shadow-sm border-0 h-100">
+              <Card className="shadow-lg border-0 h-100" style={styles.card}>
                 <Card.Img
                   variant="top"
                   src={
@@ -75,7 +123,7 @@ const Home = () => {
                       : `http://localhost:5000/uploads/${product.image}`
                   }
                   alt={product.title}
-                  style={{ height: '250px', objectFit: 'contain', padding: '1rem' }}
+                  style={styles.cardImage}
                 />
                 <Card.Body className="text-center d-flex flex-column">
                   <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
@@ -106,7 +154,7 @@ export default Home;
 
 const styles = {
   container: {
-    padding: '50px 20px',
+    padding: '60px 20px',
     backgroundColor: '#F8F9FC',
     minHeight: '80vh',
   },
@@ -115,10 +163,32 @@ const styles = {
     fontSize: '2.5rem',
     marginBottom: '40px',
     color: '#333',
+    fontWeight: '600',
   },
-  hero: {
-    background: '#4A6CF7',
-    padding: '60px 20px',
-    minHeight: '250px',
+  heroImage: {
+    maxWidth: '100%',
+    height: 'auto',
+    borderRadius: '10px',
+    maxHeight: '400px',
+    objectFit: 'cover',
+  },
+  introSection: {
+    background: 'linear-gradient(to right, #4A6CF7, #6D9EFF)',
+    padding: '120px 20px',
+    textShadow: '1px 1px 5px rgba(0,0,0,0.2)',
+  },
+  featuresSection: {
+    backgroundColor: '#F8F9FC',
+  },
+  card: {
+    borderRadius: '10px',
+    backgroundColor: '#fff',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  },
+  cardImage: {
+    height: '250px',
+    objectFit: 'contain',
+    padding: '1rem',
+    borderRadius: '10px',
   },
 };

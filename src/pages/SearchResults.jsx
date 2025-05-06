@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Col, Row } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
+import { Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem } from '../pages/cartSlice';
-import { FaShoppingCart } from 'react-icons/fa';
+import { addItem } from './cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // Adjust the path as necessary
-
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import '../css/Style.css'; // 👈 Include the CSS animation here
 
-const Electronics = () => {
-  const [products, setProducts] = useState([]);
+const SearchResults = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const [results, setResults] = useState([]);
+
+  const query = new URLSearchParams(location.search).get('query')?.toLowerCase() || '';
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchResults = async () => {
       try {
         const res = await axios.get('http://localhost:5000/products/all');
-        const electronicsProducts = res.data.filter((product) =>
-          product.category.toLowerCase().includes('electronics')
+        const filtered = res.data.filter((item) =>
+          item.title.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query) ||
+          item.price.toString().includes(query)
         );
-        setProducts(electronicsProducts);
+        setResults(filtered);
       } catch (error) {
-        console.error('Error fetching products', error);
+        console.error('Search error', error);
       }
     };
-    fetchProducts();
-  }, []);
+    fetchResults();
+  }, [query]);
 
   const handleAddToCart = (product) => {
     const exists = cartItems.find((item) => item._id === product._id);
@@ -45,15 +46,10 @@ const Electronics = () => {
   return (
     <>
       <Navbar />
-
-      {/* Animated Banner Section */}
-    
-
-      {/* Product Grid for Electronics */}
-      <section style={styles.container}>
-        <h2 style={styles.heading}>💻 Explore Our Electronics</h2>
+      <section style={{ padding: '50px 20px', background: '#F8F9FC', minHeight: '80vh' }}>
+        <h3 className="text-center mb-4">Search Results for "{query}"</h3>
         <Row className="g-4">
-          {products.map((product) => (
+          {results.length > 0 ? results.map((product) => (
             <Col key={product._id} md={6} lg={4}>
               <Card className="shadow-sm border-0 h-100">
                 <Card.Img
@@ -63,46 +59,25 @@ const Electronics = () => {
                       ? 'https://via.placeholder.com/300x200.png?text=No+Image'
                       : `http://localhost:5000/uploads/${product.image}`
                   }
-                  alt={product.title}
                   style={{ height: '250px', objectFit: 'contain', padding: '1rem' }}
                 />
                 <Card.Body className="text-center d-flex flex-column">
                   <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
                   <Card.Text className="text-muted small">Category: {product.category}</Card.Text>
-                  <div className="d-flex justify-content-center mt-auto gap-3">
-                    <button className="btn btn-outline-success btn-sm" onClick={() => handleAddToCart(product)}>
-                      Buy Now
-                    </button>
-                    <button className="btn btn-outline-primary btn-sm" onClick={() => handleAddToCart(product)}>
-                      <FaShoppingCart />
-                    </button>
-                  </div>
+                  <button className="btn btn-outline-success mt-auto" onClick={() => handleAddToCart(product)}>Add to Cart</button>
                 </Card.Body>
               </Card>
             </Col>
-          ))}
+          )) : (
+            <p className="text-center">No products found.</p>
+          )}
         </Row>
       </section>
-
       <Footer />
       <ToastContainer position="top-center" autoClose={2000} theme="colored" />
     </>
   );
 };
 
-export default Electronics;
-
-const styles = {
-  container: {
-    padding: '50px 20px',
-    backgroundColor: '#F8F9FC',
-    minHeight: '80vh',
-  },
-  heading: {
-    textAlign: 'center',
-    fontSize: '2.5rem',
-    marginBottom: '40px',
-    color: '#333',
-  },
-};
+export default SearchResults;

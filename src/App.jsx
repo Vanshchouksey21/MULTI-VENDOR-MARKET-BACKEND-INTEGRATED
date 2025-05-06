@@ -8,6 +8,10 @@ import CartPage from './pages/Cart';
 import BuyerDashboard from './pages/BuyerDashboard';
 import Smartphone from './pages/Smartphone';
 import Checkout from './pages/Checkout';
+import SearchResults from './pages/SearchResults';
+
+import Fashion from './pages/Fashion';
+import Beauty from './pages/Beauty';
 
 function App() {
   return (
@@ -21,8 +25,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
-        <Route path="/products/smartphones" element={<Smartphone/>} />
+        <Route path="/products/electronics" element={<Smartphone/>} />
+        <Route path="/products/fashion" element={<Fashion/>} />
+        <Route path="/products/Beauty" element={<Beauty/>} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/search" element={<SearchResults />} />
+        
         
       
 <Route path="/seller-dashboard" element={<SellerDashboard />} />

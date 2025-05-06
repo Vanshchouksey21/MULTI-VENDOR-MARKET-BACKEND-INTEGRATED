@@ -1,47 +1,133 @@
 /* Custom CSS for Header/Navbar */
 
-/* Navbar styling */
-.navbar {
-    background-color: #4A6CF7 !important; /* Royal Blue */
-    transition: background-color 0.3s ease;
+  /* Navbar Styling */
+  /* General Navbar Styles */
+.custom-navbar {
+  background-color: #ffffff;
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Center Nav Items */
+.center-nav {
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.center-nav .nav-link {
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.center-nav .nav-link:hover {
+  color: #4A6CF7;
+}
+
+/* Right Side Icons */
+.right-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  position: relative;
+  padding: 0;
+  font-size: 1.25rem;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: #4A6CF7;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background-color: crimson;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+
+/* Search Box */
+.search-box-container {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  padding: 10px;
+  width: 250px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.search-box-container.show {
+  display: block;
+}
+
+.search-box-container input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .center-nav {
+    order: 3;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
   }
-  
-  .navbar .navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #F8F9FC; /* Light Grey/Off-White */
+
+  .right-icons {
+    order: 2;
+    margin-left: auto;
   }
-  
-  .navbar .navbar-brand:hover {
-    color: #FF7F50; /* Bright Orange */
+
+  .search-box-container {
+    right: 10px;
+    top: 55px;
+    width: 90%;
   }
-  
-  .navbar .navbar-nav .nav-link {
-    color: #F8F9FC; /* Light Grey/Off-White */
-    font-size: 1.1rem;
-    margin-right: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
   }
-  
-  .navbar .navbar-nav .nav-link:hover {
-    color: #FF7F50; /* Bright Orange */
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .navbar .navbar-toggler {
-    background-color: #FF7F50; /* Bright Orange */
-  }
-  
-  .navbar .navbar-toggler-icon {
-    background-color: #F8F9FC; /* Light Grey/Off-White */
-  }
-  
-  .navbar .navbar-collapse {
-    background-color: #4A6CF7; /* Royal Blue */
-  }
-  
-  .navbar .navbar-collapse .nav-link {
-    color: #F8F9FC; /* Light Grey/Off-White */
-  }
-  
+}
+
+
   /* Search Form Styling */
   .form-control {
     background-color: #D5E6FB; /* Soft Sky Blue */
@@ -135,3 +221,11 @@
   animation: bannerSwap 8s infinite ease-in-out;
   transition: all 1s ease-in-out;
 }
+
+
+
+
+
+
+
+

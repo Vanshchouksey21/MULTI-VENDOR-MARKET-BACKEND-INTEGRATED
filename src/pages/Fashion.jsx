@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Col, Row } from 'react-bootstrap';
+import { FaShoppingCart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
-import { FaShoppingCart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // Adjust the path as necessary
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import '../css/Style.css'; // 👈 Include the CSS animation here
+import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // Adjust the path as necessary
 
-const Electronics = () => {
+const Fashion = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
@@ -21,10 +20,10 @@ const Electronics = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:5000/products/all');
-        const electronicsProducts = res.data.filter((product) =>
-          product.category.toLowerCase().includes('electronics')
+        const fashionProducts = res.data.filter((product) =>
+          product.category.toLowerCase().includes('fashion')
         );
-        setProducts(electronicsProducts);
+        setProducts(fashionProducts);
       } catch (error) {
         console.error('Error fetching products', error);
       }
@@ -46,12 +45,11 @@ const Electronics = () => {
     <>
       <Navbar />
 
-      {/* Animated Banner Section */}
-    
+   
 
-      {/* Product Grid for Electronics */}
+      {/* Product Grid for Fashion Items */}
       <section style={styles.container}>
-        <h2 style={styles.heading}>💻 Explore Our Electronics</h2>
+        <h2 style={styles.heading}>👗 Explore Our Fashion Collection</h2>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
@@ -91,7 +89,7 @@ const Electronics = () => {
   );
 };
 
-export default Electronics;
+export default Fashion;
 
 const styles = {
   container: {
