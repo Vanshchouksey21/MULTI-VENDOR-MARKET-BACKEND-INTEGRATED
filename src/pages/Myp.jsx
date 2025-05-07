@@ -11,6 +11,7 @@ const Myp = () => {
     price: '',
     category: '',
     stock: '',
+    image: null,
   });
 
   const fetchMyProducts = async () => {
@@ -47,18 +48,43 @@ const Myp = () => {
       price: product.price,
       category: product.category,
       stock: product.stock || '',
+      image: null,
     });
     setShowEditModal(true);
   };
 
   const handleEditChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    setFormData(prev => ({ ...prev, image: e.target.files[0] }));
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await axios.put(`http://localhost:5000/products/${selectedProduct._id}`, formData);
+      const data = new FormData();
+      data.append('title', formData.title);
+      data.append('price', formData.price);
+      data.append('category', formData.category);
+      data.append('stock', formData.stock);
+      if (formData.image) {
+        data.append('image', formData.image);
+      }
+
+      await axios.put(
+        `http://localhost:5000/products/${selectedProduct._id}`,
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
       setShowEditModal(false);
       fetchMyProducts();
     } catch (err) {
@@ -157,6 +183,10 @@ const Myp = () => {
                 onChange={handleEditChange}
                 required
               />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Change Image</Form.Label>
+              <Form.Control type="file" onChange={handleImageChange} />
             </Form.Group>
             <Button variant="success" type="submit" className="w-100">
               Save Changes

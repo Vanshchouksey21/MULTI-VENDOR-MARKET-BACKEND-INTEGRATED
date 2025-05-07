@@ -118,7 +118,7 @@ const Home = () => {
        <container className="my-4">
        <Row className="justify-content-center text-center">
        <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in">
-       <div onClick={() => navigate("/products/Electronics")} style={{ cursor: "pointer" }}>
+       <div onClick={() => navigate("/products/Fashion")} style={{ cursor: "pointer" }}>
         <img src={fashion} 
         alt="Fashion"
         className="rounded-circle mb-2"
@@ -173,7 +173,7 @@ const Home = () => {
         <h2 style={styles.heading}>🛍️ Explore Our Products</h2>
         <Row className="g-4">
           {products.map((product) => (
-            <Col key={product._id} md={6} lg={4}>
+            <Col key={product._id} md={6} lg={4}>z
               <Card className="shadow-lg border-0 h-100" style={styles.card}>
                 <Card.Img
                   variant="top"

@@ -8,6 +8,7 @@ import { addItem } from './cartSlice';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 
 import Navbar from '../components/Navbar';
@@ -18,6 +19,8 @@ const Beauty = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+    const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,14 +38,37 @@ const Beauty = () => {
   }, []);
 
   const handleAddToCart = (product) => {
-    const exists = cartItems.find((item) => item._id === product._id);
-    if (exists) {
-      toast.error(`${product.title} is already in the cart!`);
-    } else {
-      dispatch(addItem(product));
-      toast.success(`${product.title} added to cart!`);
-    }
-  };
+     const userId = localStorage.getItem("userId");
+     if (!userId) {
+       toast.error('Please login to add products to the cart!');
+       navigate('/login'); 
+ 
+       return;
+     }
+ 
+     const exists = cartItems.find((item) => item._id === product._id);
+     if (exists) {
+       toast.error(`${product.title} is already in the cart!`);
+     } else {
+       dispatch(addItem(product));
+       toast.success(`${product.title} added to cart!`);
+     }
+   };
+ 
+   const handleBuyNow = (product) => {
+     const userId = localStorage.getItem("userId");
+     if (!userId) {
+       toast.error('Please login to continue to checkout!');
+       navigate('/login'); 
+       return;
+     }
+ 
+     const exists = cartItems.find((item) => item._id === product._id);
+     if (!exists) {
+       dispatch(addItem(product));
+     }
+     navigate('/checkout');
+   };
 
   return (
     <>
@@ -69,7 +95,7 @@ const Beauty = () => {
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
                   <Card.Text className="text-muted small">Category: {product.category}</Card.Text>
                   <div className="d-flex justify-content-center mt-auto gap-3">
-                    <button className="btn btn-outline-success btn-sm" onClick={() => handleAddToCart(product)}>
+                    <button className="btn btn-outline-success btn-sm" onClick={() => handleBuyNow(product)}>
                       Buy Now
                     </button>
                     <button className="btn btn-outline-primary btn-sm" onClick={() => handleAddToCart(product)}>

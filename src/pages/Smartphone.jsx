@@ -10,12 +10,13 @@ import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; 
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import '../css/Style.css'; // 👈 Include the CSS animation here
+import { useNavigate } from 'react-router-dom'; // for navigation
 
 const Electronics = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
+  const navigate = useNavigate(); // To handle navigation
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,6 +34,16 @@ const Electronics = () => {
   }, []);
 
   const handleAddToCart = (product) => {
+    const userId = localStorage.getItem('userId'); // Get userId from localStorage (assuming user is logged in if there's a userId)
+    
+    if (!userId) {
+      // If user is not logged in
+      toast.warning('Please log in to add items to your cart.');
+      navigate('/login'); // Redirect to login page
+      return;
+    }
+
+    // If user is logged in, proceed with adding to the cart
     const exists = cartItems.find((item) => item._id === product._id);
     if (exists) {
       toast.error(`${product.title} is already in the cart!`);
@@ -42,12 +53,29 @@ const Electronics = () => {
     }
   };
 
+  const handleBuyNow = (product) => {
+    const userId = localStorage.getItem('userId'); // Check if user is logged in
+
+    if (!userId) {
+      // If not logged in, redirect to login
+      toast.warning('Please log in to proceed with the purchase.');
+      navigate('/login');
+      return;
+    }
+
+    // If logged in, proceed with adding to cart and navigating to checkout
+    const exists = cartItems.find((item) => item._id === product._id);
+    if (!exists) {
+      dispatch(addItem(product));
+      toast.success(`${product.title} added to cart!`);
+    }
+
+    navigate('/checkout'); // Redirect to checkout page
+  };
+
   return (
     <>
       <Navbar />
-
-      {/* Animated Banner Section */}
-    
 
       {/* Product Grid for Electronics */}
       <section style={styles.container}>
@@ -71,7 +99,7 @@ const Electronics = () => {
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
                   <Card.Text className="text-muted small">Category: {product.category}</Card.Text>
                   <div className="d-flex justify-content-center mt-auto gap-3">
-                    <button className="btn btn-outline-success btn-sm" onClick={() => handleAddToCart(product)}>
+                    <button className="btn btn-outline-success btn-sm" onClick={() => handleBuyNow(product)}>
                       Buy Now
                     </button>
                     <button className="btn btn-outline-primary btn-sm" onClick={() => handleAddToCart(product)}>
