@@ -4,7 +4,7 @@ import { FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import '../css/Style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../images/ChatGPT Image May 2, 2025, 07_12_49 PM.png';
+import logo from '../images/ChatGPT Image May 8, 2025, 01_41_06 PM.png';
 
 const Navbar = () => {
   const navigate = useNavigate();

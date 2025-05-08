@@ -7,7 +7,6 @@ import { addItem } from '../pages/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
-import ban from "../images/ChatGPT Image May 7, 2025, 11_25_55 PM.png";
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -85,25 +84,24 @@ const Fashion = () => {
 
       {/* Hero Section with Image and Text */}
       <section style={styles.heroSection}>
-        <div style={styles.heroContent}>
-          <img
-            src={ban}
-            alt="Fashion banner"
-            style={styles.heroImage}
-          />
-          <div style={styles.textBlock}>
-            <h2 style={styles.heroHeading}>Unleash Your Style 💃</h2>
-            <p style={styles.heroTagline}>
-              Elevate your wardrobe with trending fashion—from casual wear to couture. Style is a way to say who you are without speaking.
-            </p>
-            <button className="btn btn-primary mt-2" onClick={scrollToProducts}>Shop Now</button>
-          </div>
-        </div>
-      </section>
+  <div style={styles.heroContent}>
+    <h2 style={styles.heroHeading}>
+      <span style={styles.accent}>Unleash Your Style </span>
+    </h2>
+    <p style={styles.heroTagline}>
+      Fashion is the armor to survive everyday life. Whether you're dressing for comfort or couture, let your outfit tell your story.
+    </p>
+    <button className="btn btn-primary mt-3 px-4 py-2 fs-6 fw-semibold" onClick={scrollToProducts}>
+  Explore Collection
+</button>
+
+  </div>
+</section>
+
 
       {/* Product Grid */}
-      <section ref={productSectionRef} style={styles.container}>
-        <h1 style={styles.heroTitle}>Step into Style 👠</h1>
+      <section ref={productSectionRef} style={styles.container}>  
+        <h1 style={styles.heroTitle}>Step into Styles </h1>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
@@ -151,50 +149,43 @@ export default Fashion;
 
 const styles = {
   heroSection: {
-    padding: '30px 15px',
-    background: '#fff',
-    borderBottom: '1px solid #ddd',
+    padding: '100px 20px',
+    backgroundColor: '#ffffff',
+    color: '#333333',
+    textAlign: 'center',
+    borderBottom: '1px solid #e0e0e0',
   },
   heroContent: {
-    maxWidth: '650px',
+    maxWidth: '800px',
     margin: '0 auto',
     display: 'flex',
-    flexDirection: 'column', // stack image and text vertically
+    flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center',
     gap: '1.5rem',
   },
-  textBlock: {
-    maxWidth: '600px',
-  },
   heroHeading: {
-    fontSize: '2rem',
-    color: '#333',
-    fontWeight: '700',
-    marginBottom: '10px',
+    fontSize: '3rem',
+    fontWeight: '800',
+    letterSpacing: '-0.5px',
+    lineHeight: '1.2',
+    color: '#4A6CF7',
   },
   heroTagline: {
-    fontSize: '1rem',
-    color: '#555',
-    lineHeight: '1.4',
-    marginBottom: '10px',
-  },
-  heroImage: {
-    width: '100%',
+    fontSize: '1.2rem',
+    color: '#555555',
     maxWidth: '600px',
-    borderRadius: '10px',
-    objectFit: 'cover',
-  },
-  heroTitle: {
-    fontSize: '3rem',
-    color: '#4A6CF7',
-    textAlign: 'center',
-    fontWeight: '700',
-    marginBottom: '20px',
+    lineHeight: '1.6',
   },
   container: {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',
     minHeight: '80vh',
+  },
+  heroTitle: {
+    fontSize: '2.5rem',
+    color: '#4A6CF7',
+    textAlign: 'center',
+    fontWeight: '700',
+    marginBottom: '30px',
   },
 };

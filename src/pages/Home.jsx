@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
 import { FaShoppingCart } from 'react-icons/fa';
@@ -15,6 +15,7 @@ import fashion from "../images/ChatGPT Image May 6, 2025, 10_32_02 PM.png"
 import electronics from "../images/ChatGPT Image May 6, 2025, 10_32_05 PM.png"
 import beauty from "../images/ChatGPT Image May 6, 2025, 10_32_00 PM.png"
 import food from "../images/ChatGPT Image May 6, 2025, 10_31_58 PM.png"
+
 const Home = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
@@ -84,7 +85,6 @@ const Home = () => {
         <a href="#products" className="btn btn-warning fw-semibold px-5 py-2 rounded-pill fs-5">Explore Now</a>
       </section>
 
-     
       {/* Features Section */}
       <section style={styles.featuresSection} className="text-center py-5">
         <Row className="g-4">
@@ -112,68 +112,47 @@ const Home = () => {
         </Row>
       </section>
 
-       {/* Shop  */}
-       <section>
-       <h2 className="text-center mt-5" data-aos="fade-up">Shop by Category</h2>
-       <container className="my-4">
-       <Row className="justify-content-center text-center">
-       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in">
-       <div onClick={() => navigate("/products/Fashion")} style={{ cursor: "pointer" }}>
-        <img src={fashion} 
-        alt="Fashion"
-        className="rounded-circle mb-2"
-        style={{ width: "180px", height: "180px", objectFit: "cover" }}
-         />
-          <h3>Fashion</h3>
-        </div>
-       </Col>
-       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
-       <div onClick={() => navigate("/products/Electronics")} style={{ cursor: "pointer" }}>
-                <img
-                  src={electronics} // Replace with your image path
-                  alt="Electronics"
-                  className="rounded-circle mb-2"
-                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
-                />
+      {/* Shop by Category */}
+      <section>
+        <h2 className="text-center mt-5" data-aos="fade-up">Shop by Category</h2>
+        <Container className="my-4">
+          <Row className="justify-content-center text-center">
+            <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in">
+              <div onClick={() => navigate("/products/Fashion")} style={{ cursor: "pointer" }}>
+                <img src={fashion} alt="Fashion" className="rounded-circle mb-2" style={{ width: "180px", height: "180px", objectFit: "cover" }} />
+                <h3>Fashion</h3>
+              </div>
+            </Col>
+            <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+              <div onClick={() => navigate("/products/Electronics")} style={{ cursor: "pointer" }}>
+                <img src={electronics} alt="Electronics" className="rounded-circle mb-2" style={{ width: "180px", height: "180px", objectFit: "cover" }} />
                 <h3>Electronics</h3>
               </div>
-       </Col>
+            </Col>
 
-       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
-       <div onClick={() => navigate("/products/food")} style={{ cursor: "pointer" }}>
-                <img
-                  src={food} // Replace with your image path
-                  alt="Food & Beverages "
-                  className="rounded-circle mb-2"
-                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
-                />
-                <h3>Food & Beverages </h3>
+            <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+              <div onClick={() => navigate("/products/food")} style={{ cursor: "pointer" }}>
+                <img src={food} alt="Food & Beverages" className="rounded-circle mb-2" style={{ width: "180px", height: "180px", objectFit: "cover" }} />
+                <h3>Food & Beverages</h3>
               </div>
-       </Col>
+            </Col>
 
-       <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
-       <div onClick={() => navigate("products/Beauty")} style={{ cursor: "pointer" }}>
-                <img
-                  src={beauty} // Replace with your image path
-                  alt="Health & Beauty"
-                  className="rounded-circle mb-2"
-                  style={{ width: "180px", height: "180px", objectFit: "cover" }}
-                />
+            <Col xs={6} sm={4} md={3} className="mb-4" data-aos="zoom-in" data-aos-delay="100">
+              <div onClick={() => navigate("products/Beauty")} style={{ cursor: "pointer" }}>
+                <img src={beauty} alt="Health & Beauty" className="rounded-circle mb-2" style={{ width: "180px", height: "180px", objectFit: "cover" }} />
                 <h3>Health & Beauty</h3>
               </div>
-       </Col>
-       </Row>
-
-       </container>
+            </Col>
+          </Row>
+        </Container>
       </section>
-     
 
       {/* Product Grid */}
       <section id="products" style={styles.container}>
         <h2 style={styles.heading}>🛍️ Explore Our Products</h2>
         <Row className="g-4">
           {products.map((product) => (
-            <Col key={product._id} md={6} lg={4}>z
+            <Col key={product._id} md={6} lg={4}>
               <Card className="shadow-lg border-0 h-100" style={styles.card}>
                 <Card.Img
                   variant="top"

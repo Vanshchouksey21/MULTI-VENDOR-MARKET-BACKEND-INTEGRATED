@@ -43,10 +43,7 @@ const DashboardHome = () => {
           <p style={styles.cardValue}>{stats.products}</p>
         </div>
         
-        <div style={styles.card}>
-          <h4 style={styles.cardTitle}>Earnings</h4>
-          <p style={styles.cardValue}>₹{stats.earnings}</p>
-        </div>
+        
       </div>
     </div>
   );

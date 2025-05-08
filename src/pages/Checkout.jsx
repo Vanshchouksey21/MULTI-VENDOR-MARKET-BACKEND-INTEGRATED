@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../pages/cartSlice';
@@ -7,34 +7,68 @@ import Swal from 'sweetalert2';
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const userId = localStorage.getItem("userId");
+  // Load Razorpay script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
-    if (!userId) {
-      Swal.fire("Not logged in", "Please log in before placing an order.", "warning");
-      return;
-    }
-
-    if (cartItems.length === 0) {
-      Swal.fire("Empty Cart", "Please add items to your cart first.", "info");
-      return;
-    }
-
+  const handlePayment = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/orders', {
-        userId,
-        items: cartItems,
+      const { data } = await axios.post('http://localhost:5000/api/payment/orders', {
+        amount: totalAmount,
       });
 
-      Swal.fire("Success!", "Your order was placed successfully.", "success");
-      dispatch(clearCart());
+      const { id, amount, currency } = data.order;
+
+      const options = {
+        key: "rzp_test_m2OHIKOzjgb5LI" , // ✅ Your public Razorpay Key
+        amount,
+        currency,
+        name: 'MultiVendor Store',
+        description: 'Order Payment',
+        order_id: id,
+        handler: async (response) => {
+          try {
+            const verifyResponse = await axios.post('http://localhost:5000/api/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyResponse.data.message === 'Payment verified successfully') {
+              Swal.fire('Success', 'Payment Successful!', 'success');
+              dispatch(clearCart());
+            } else {
+              Swal.fire('Verification Failed', 'Invalid payment signature.', 'error');
+            }
+          } catch (err) {
+            console.error('Verification error:', err);
+            Swal.fire('Error', 'Failed to verify payment.', 'error');
+          }
+        },
+        prefill: {
+          name: 'Customer',
+          email: 'customer@example.com',
+          contact: '9999999999',
+        },
+        theme: {
+          color: '#4A6CF7',
+        },
+      };
+
+      const razor = new window.Razorpay(options);
+      razor.open();
     } catch (error) {
-      console.error("Order error:", error);
-      Swal.fire("Error", "Something went wrong while placing the order.", "error");
+      console.error('Payment error:', error.response?.data || error.message);
+      Swal.fire('Error', 'Payment failed. Please try again.', 'error');
     }
   };
 
@@ -46,25 +80,25 @@ const Checkout = () => {
         {cartItems.length === 0 ? (
           <p style={styles.empty}>Your cart is empty.</p>
         ) : (
-          <ul style={styles.itemList}>
-            {cartItems.map((item, index) => (
-              <li key={index} style={styles.item}>
-                <span>{item.title} × {item.quantity}</span>
-                <span>₹{item.price * item.quantity}</span>
+          <>
+            <ul style={styles.itemList}>
+              {cartItems.map((item, index) => (
+                <li key={index} style={styles.item}>
+                  <span>{item.title} × {item.quantity}</span>
+                  <span>₹{item.price * item.quantity}</span>
+                </li>
+              ))}
+              <hr />
+              <li style={styles.total}>
+                <strong>Total:</strong>
+                <strong>₹{totalAmount}</strong>
               </li>
-            ))}
-            <hr />
-            <li style={styles.total}>
-              <strong>Total:</strong>
-              <strong>₹{totalAmount}</strong>
-            </li>
-          </ul>
+            </ul>
+            <button onClick={handlePayment} style={styles.button}>
+              Pay Now
+            </button>
+          </>
         )}
-        <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-          <button type="submit" style={styles.button} disabled={cartItems.length === 0}>
-            Place Order
-          </button>
-        </form>
       </div>
     </div>
   );
@@ -72,7 +106,6 @@ const Checkout = () => {
 
 export default Checkout;
 
-// ✅ Simple inline styles
 const styles = {
   container: {
     maxWidth: '600px',

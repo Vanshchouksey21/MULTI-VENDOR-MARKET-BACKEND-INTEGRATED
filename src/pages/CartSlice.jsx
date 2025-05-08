@@ -1,45 +1,50 @@
-// cartSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  items: [],
-};
+const userId = localStorage.getItem("userId");
+
+const initialCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState,
+  initialState: {
+    items: initialCart,
+  },
   reducers: {
     addItem: (state, action) => {
-      const existingItem = state.items.find(item => item._id === action.payload._id);
-      if (existingItem) {
-        if (existingItem.quantity < action.payload.stock) {
-          existingItem.quantity += 1;
-        }
-      } else {
-        state.items.push({ ...action.payload, quantity: 1 });
-      }
+      state.items.push({ ...action.payload, quantity: 1 });
+      saveCart(state.items);
     },
     removeItem: (state, action) => {
       state.items = state.items.filter(item => item._id !== action.payload);
-    },
-    clearCart: (state) => {
-      state.items = [];
+      saveCart(state.items);
     },
     increaseQuantity: (state, action) => {
       const item = state.items.find(item => item._id === action.payload);
-      if (item && item.quantity < item.stock) {
-        item.quantity += 1;
-      }
+      if (item) item.quantity++;
+      saveCart(state.items);
     },
     decreaseQuantity: (state, action) => {
       const item = state.items.find(item => item._id === action.payload);
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
-      }
+      if (item && item.quantity > 1) item.quantity--;
+      saveCart(state.items);
     },
-  },
+    clearCart: (state) => {
+      state.items = [];
+      saveCart([]);
+    },
+    setCart: (state, action) => {
+      state.items = action.payload;
+      saveCart(action.payload);
+    }
+  }
 });
 
-export const { addItem, removeItem, clearCart, increaseQuantity, decreaseQuantity } = cartSlice.actions;
+const saveCart = (cart) => {
+  const currentUserId = localStorage.getItem("userId");
+  if (currentUserId) {
+    localStorage.setItem(`cart_${currentUserId}`, JSON.stringify(cart));
+  }
+};
 
+export const { addItem, removeItem, increaseQuantity, decreaseQuantity, clearCart, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
