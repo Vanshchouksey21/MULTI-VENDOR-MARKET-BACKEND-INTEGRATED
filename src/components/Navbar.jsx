@@ -48,24 +48,26 @@ const Navbar = () => {
               <Link className="nav-link" to="/">Home</Link>
             </li>
 
-            <li className="nav-item dropdown">
-              <Link className="nav-link dropdown-toggle" to="#" data-bs-toggle="dropdown">Products</Link>
+            {/* 🔽 Hover Dropdown */}
+            <li className="nav-item dropdown hover-dropdown">
+              <Link className="nav-link dropdown-toggle" to="#" role="button">
+                Products
+              </Link>
               <ul className="dropdown-menu animate-slide">
                 <li><Link className="dropdown-item" to="/products/Electronics">Electronics</Link></li>
-                <li><Link className="dropdown-item" to="/products/fashion ">Fashion</Link></li>
+                <li><Link className="dropdown-item" to="/products/fashion">Fashion</Link></li>
                 <li><Link className="dropdown-item" to="/products/Beauty">Health & Beauty</Link></li>
                 <li><Link className="dropdown-item" to="/products/food">Food & Beverages</Link></li>
               </ul>
             </li>
 
             <li className="nav-item">
-            <Link className="nav-link position-relative" to="/cart">
-  <FaShoppingCart size={22} className="icon-btn" />
-  {cartItems.length > 0 && (
-    <span className="cart-badge">{cartItems.length}</span>
-  )}
-</Link>
-
+              <Link className="nav-link position-relative" to="/cart">
+                <FaShoppingCart size={22} className="icon-btn" />
+                {cartItems.length > 0 && (
+                  <span className="cart-badge">{cartItems.length}</span>
+                )}
+              </Link>
             </li>
 
             {/* 🔍 Search Field */}
@@ -82,6 +84,7 @@ const Navbar = () => {
               </form>
             </li>
 
+            {/* 🔐 Auth Options */}
             {token ? (
               <li className="nav-item dropdown">
                 <span
@@ -94,8 +97,17 @@ const Navbar = () => {
                   My Profile
                 </span>
                 <ul className="dropdown-menu dropdown-menu-end animate-slide">
-                  <li><Link className="dropdown-item" to={dashboardRoute}>Dashboard</Link></li>
-                  <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                  {role === 'buyer' ? (
+                    <>
+                      <li><Link className="dropdown-item" to="/OrderHistory">Order History</Link></li>
+                      <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                    </>
+                  ) : (
+                    <>
+                      <li><Link className="dropdown-item" to={dashboardRoute}>Dashboard</Link></li>
+                      <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                    </>
+                  )}
                 </ul>
               </li>
             ) : (

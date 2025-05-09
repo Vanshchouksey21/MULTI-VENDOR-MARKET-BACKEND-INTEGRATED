@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // optional
+import vdo from "../images/3209214-uhd_3840_2160_25fps.mp4";
 
 const Food = () => {
   const [products, setProducts] = useState([]);
@@ -18,7 +18,6 @@ const Food = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const navigate = useNavigate();
 
-  // ✅ get user (either from Redux or localStorage)
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -40,8 +39,7 @@ const Food = () => {
     const userId = localStorage.getItem("userId");
     if (!userId) {
       toast.error('Please login to add products to the cart!');
-      navigate('/login'); 
-
+      navigate('/login');
       return;
     }
 
@@ -58,7 +56,7 @@ const Food = () => {
     const userId = localStorage.getItem("userId");
     if (!userId) {
       toast.error('Please login to continue to checkout!');
-      navigate('/login'); 
+      navigate('/login');
       return;
     }
 
@@ -73,6 +71,24 @@ const Food = () => {
     <>
       <Navbar />
 
+      {/* Hero Video Section */}
+        <section style={styles.videoHeroSection}>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={styles.videoBackground}
+              >
+                <source src={vdo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+      
+              
+            </section>
+
+
+      {/* Food Products Section */}
       <section style={styles.container}>
         <h2 style={styles.heading}>🍔 Explore Our Food Collection</h2>
         <Row className="g-4">
@@ -94,16 +110,10 @@ const Food = () => {
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
                   <Card.Text className="text-muted small">Category: {product.category}</Card.Text>
                   <div className="d-flex justify-content-center mt-auto gap-3">
-                    <button
-                      className="btn btn-outline-success btn-sm"
-                      onClick={() => handleBuyNow(product)}
-                    >
+                    <button className="btn btn-outline-success btn-sm" onClick={() => handleBuyNow(product)}>
                       Buy Now
                     </button>
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      onClick={() => handleAddToCart(product)}
-                    >
+                    <button className="btn btn-outline-primary btn-sm" onClick={() => handleAddToCart(product)}>
                       <FaShoppingCart />
                     </button>
                   </div>
@@ -123,6 +133,38 @@ const Food = () => {
 export default Food;
 
 const styles = {
+
+  videoHeroSection: {
+    
+    position: 'relative',
+    width: '100%',
+    height: '550px',
+
+    overflow: 'hidden',
+  },
+  videoBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 1,
+  },
+  videoOverlay: {
+    position: 'relative',
+    zIndex: 2,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: '0 1rem',
+  },
   container: {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',

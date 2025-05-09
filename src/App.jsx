@@ -13,6 +13,7 @@ import SearchResults from './pages/SearchResults';
 import Fashion from './pages/Fashion';
 import Beauty from './pages/Beauty';
 import Food from './pages/Food';
+import OrderHistory from './pages/OrderHistory';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+        <Route path="/OrderHistory" element={<OrderHistory />} />
         <Route path="/products/electronics" element={<Smartphone/>} />
         <Route path="/products/fashion" element={<Fashion/>} />
         <Route path="/products/Beauty" element={<Beauty/>} />

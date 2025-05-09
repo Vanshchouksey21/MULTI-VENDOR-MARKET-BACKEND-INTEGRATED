@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { useNavigate } from 'react-router-dom';
+import vdo from "../images/853800-hd_1920_1080_25fps.mp4";
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -15,8 +16,8 @@ const Fashion = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  const productSectionRef = useRef(null); // Ref for scrolling
-  const navigate = useNavigate(); // Initialize navigate
+  const productSectionRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,15 +37,12 @@ const Fashion = () => {
   const handleAddToCart = (product) => {
     const userId = localStorage.getItem("userId");
 
-    // Check if the user is logged in
     if (!userId) {
-      // Redirect to login page if not logged in
       toast.warning("Please log in to add items to your cart.");
-      window.location.href = "/login"; // Assuming '/login' is your login route
+      window.location.href = "/login";
       return;
     }
 
-    // Proceed with adding to the cart if the user is logged in
     const exists = cartItems.find((item) => item._id === product._id);
     if (exists) {
       toast.error(`${product.title} is already in the cart!`);
@@ -57,10 +55,9 @@ const Fashion = () => {
   const handleBuyNow = (product) => {
     const userId = localStorage.getItem("userId");
 
-    // Check if the user is logged in
     if (!userId) {
       toast.error('Please log in to buy items');
-      navigate('/login'); // Navigate to the login page
+      navigate('/login');
       return;
     }
 
@@ -70,7 +67,6 @@ const Fashion = () => {
       toast.success(`${product.title} added to cart!`);
     }
 
-    // After adding the product, navigate to the checkout page
     navigate('/checkout');
   };
 
@@ -82,29 +78,28 @@ const Fashion = () => {
     <>
       <Navbar />
 
-      {/* Hero Section with Image and Text */}
-      <section style={styles.heroSection}>
-  <div style={styles.heroContent}>
-    <h2 style={styles.heroHeading}>
-      <span style={styles.accent}>Unleash Your Style </span>
-    </h2>
-    <p style={styles.heroTagline}>
-      Fashion is the armor to survive everyday life. Whether you're dressing for comfort or couture, let your outfit tell your story.
-    </p>
-    <button className="btn btn-primary mt-3 px-4 py-2 fs-6 fw-semibold" onClick={scrollToProducts}>
-  Explore Collection
-</button>
+      {/* Hero Section with Video Background */}
+      <section style={styles.videoHeroSection}>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={styles.videoBackground}
+        >
+          <source src={vdo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
-  </div>
-</section>
-
+        
+      </section>
 
       {/* Product Grid */}
-      <section ref={productSectionRef} style={styles.container}>  
-        <h1 style={styles.heroTitle}>Step into Styles </h1>
+      <section ref={productSectionRef} style={styles.container}>
+        <h1 style={styles.heroTitle}>Step into Styles</h1>
         <Row className="g-4">
           {products.map((product) => (
-            <Col key={product._id} md={6} lg={4}>
+            <Col key={product._id} xs={12} sm={6} md={6} lg={4}>
               <Card className="shadow-sm border-0 h-100">
                 <Card.Img
                   variant="top"
@@ -148,32 +143,49 @@ export default Fashion;
 // ----------------------
 
 const styles = {
-  heroSection: {
-    padding: '100px 20px',
-    backgroundColor: '#ffffff',
-    color: '#333333',
-    textAlign: 'center',
-    borderBottom: '1px solid #e0e0e0',
+  videoHeroSection: {
+    position: 'relative',
+    width: '100%',
+    height: '550px',
+
+    overflow: 'hidden',
   },
-  heroContent: {
-    maxWidth: '800px',
-    margin: '0 auto',
+  videoBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 1,
+  },
+  videoOverlay: {
+    position: 'relative',
+    zIndex: 2,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: '#fff',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: '1.5rem',
+    textAlign: 'center',
+    padding: '0 1rem',
   },
   heroHeading: {
     fontSize: '3rem',
     fontWeight: '800',
-    letterSpacing: '-0.5px',
-    lineHeight: '1.2',
-    color: '#4A6CF7',
+    marginBottom: '1rem',
+    color: '#fff',
+  },
+  accent: {
+    color: '#FF7F50',
   },
   heroTagline: {
     fontSize: '1.2rem',
-    color: '#555555',
-    maxWidth: '600px',
+    maxWidth: '700px',
+    color: '#f0f0f0',
     lineHeight: '1.6',
   },
   container: {

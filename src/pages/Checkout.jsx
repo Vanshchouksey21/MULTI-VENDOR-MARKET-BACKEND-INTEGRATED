@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../pages/cartSlice';
 import Swal from 'sweetalert2';
+import Navbar from '../components/Navbar'; // ✅ Make sure the path is correct
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // Load Razorpay script
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -29,7 +29,7 @@ const Checkout = () => {
       const { id, amount, currency } = data.order;
 
       const options = {
-        key: "rzp_test_m2OHIKOzjgb5LI" , // ✅ Your public Razorpay Key
+        key: "rzp_test_m2OHIKOzjgb5LI",
         amount,
         currency,
         name: 'MultiVendor Store',
@@ -73,34 +73,37 @@ const Checkout = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Checkout</h2>
-      <div style={styles.summary}>
-        <h3 style={styles.sectionTitle}>Order Summary</h3>
-        {cartItems.length === 0 ? (
-          <p style={styles.empty}>Your cart is empty.</p>
-        ) : (
-          <>
-            <ul style={styles.itemList}>
-              {cartItems.map((item, index) => (
-                <li key={index} style={styles.item}>
-                  <span>{item.title} × {item.quantity}</span>
-                  <span>₹{item.price * item.quantity}</span>
+    <>
+      <Navbar /> {/* ✅ Navbar added here */}
+      <div style={styles.container}>
+        <h2 style={styles.title}>Checkout</h2>
+        <div style={styles.summary}>
+          <h3 style={styles.sectionTitle}>Order Summary</h3>
+          {cartItems.length === 0 ? (
+            <p style={styles.empty}>Your cart is empty.</p>
+          ) : (
+            <>
+              <ul style={styles.itemList}>
+                {cartItems.map((item, index) => (
+                  <li key={index} style={styles.item}>
+                    <span>{item.title} × {item.quantity}</span>
+                    <span>₹{item.price * item.quantity}</span>
+                  </li>
+                ))}
+                <hr />
+                <li style={styles.total}>
+                  <strong>Total:</strong>
+                  <strong>₹{totalAmount}</strong>
                 </li>
-              ))}
-              <hr />
-              <li style={styles.total}>
-                <strong>Total:</strong>
-                <strong>₹{totalAmount}</strong>
-              </li>
-            </ul>
-            <button onClick={handlePayment} style={styles.button}>
-              Pay Now
-            </button>
-          </>
-        )}
+              </ul>
+              <button onClick={handlePayment} style={styles.button}>
+                Pay Now
+              </button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import vdo from '../images/3971844-hd_1920_1080_25fps.mp4'; // Adjust the path as necessary
 
 
 import Navbar from '../components/Navbar';
@@ -73,6 +74,23 @@ const Beauty = () => {
   return (
     <>
       <Navbar />
+
+      {/* Hero Section with Video Background */}
+            <section style={styles.videoHeroSection}>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={styles.videoBackground}
+              >
+                <source src={vdo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+      
+              
+            </section>
+      
     
       <section style={styles.container}>
         <h2 style={styles.heading}>💅 Discover Beauty Products</h2>
@@ -118,6 +136,36 @@ const Beauty = () => {
 export default Beauty;
 
 const styles = {
+  videoHeroSection: {
+    position: 'relative',
+    width: '100%',
+    height: '550px',
+
+    overflow: 'hidden',
+  },
+  videoBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 1,
+  },
+  videoOverlay: {
+    position: 'relative',
+    zIndex: 2,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: '0 1rem',
+  },
   container: {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',

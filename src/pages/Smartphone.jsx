@@ -6,7 +6,7 @@ import { addItem } from '../pages/cartSlice';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import bannerImage from '../images/ChatGPT Image May 3, 2025, 07_11_34 PM.png'; // Adjust the path as necessary
+import vdo from '../images/13600721_1920_1080_30fps.mp4'; // Adjust the path as necessary
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -77,6 +77,20 @@ const Electronics = () => {
     <>
       <Navbar />
 
+       {/* Hero Video Section */}
+              <section style={styles.videoHeroSection}>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={styles.videoBackground}
+                    >
+                      <source src={vdo} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </section>
+
       {/* Product Grid for Electronics */}
       <section style={styles.container}>
         <h2 style={styles.heading}>💻 Explore Our Electronics</h2>
@@ -122,6 +136,37 @@ const Electronics = () => {
 export default Electronics;
 
 const styles = {
+  videoHeroSection: {
+    
+    position: 'relative',
+    width: '100%',
+    height: '550px',
+
+    overflow: 'hidden',
+  },
+  videoBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 1,
+  },
+  videoOverlay: {
+    position: 'relative',
+    zIndex: 2,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: '0 1rem',
+  },
   container: {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',
