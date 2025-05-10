@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './cartSlice';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart  , FaArrowLeft} from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,9 @@ import vdo from '../images/3971844-hd_1920_1080_25fps.mp4'; // Adjust the path a
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../css/Style.css';
+
+
+
 
 const Beauty = () => {
   const [products, setProducts] = useState([]);
@@ -93,21 +96,27 @@ const Beauty = () => {
       
     
       <section style={styles.container}>
+        <FaArrowLeft
+                    onClick={() => navigate('/')}
+                    style={{
+                      cursor: 'pointer',
+                      fontSize: '2.5rem',
+                      color: '#4A6CF7',
+                      
+                    }}
+                    />
         <h2 style={styles.heading}>💅 Discover Beauty Products</h2>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
               <Card className="shadow-sm border-0 h-100">
                 <Card.Img
-                  variant="top"
-                  src={
-                    product.image === 'noimage.jpg'
-                      ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                      : `http://localhost:5000/uploads/${product.image}`
-                  }
-                  alt={product.title}
-                  style={{ height: '250px', objectFit: 'contain', padding: '1rem' }}
-                />
+                 variant="top"
+                 src={product.image === 'noimage.jpg' ? 'https://via.placeholder.com/300x200.png?text=No+Image' : `http://localhost:5000/uploads/${product.image}`}
+                 alt={product.title}
+                 style={styles.cardImage}
+                 onClick={() => navigate(`/details/${product._id}`)} // 
+               />
                 <Card.Body className="text-center d-flex flex-column">
                   <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
@@ -165,6 +174,13 @@ const styles = {
     alignItems: 'center',
     textAlign: 'center',
     padding: '0 1rem',
+  },
+   cardImage: {
+    height: '250px',
+    objectFit: 'contain',
+    padding: '1rem',
+    borderRadius: '10px',
+    cursor:"pointer"
   },
   container: {
     padding: '50px 20px',

@@ -36,6 +36,7 @@ const cartSlice = createSlice({
       state.items = action.payload;
       saveCart(action.payload);
     }
+    
   }
 });
 

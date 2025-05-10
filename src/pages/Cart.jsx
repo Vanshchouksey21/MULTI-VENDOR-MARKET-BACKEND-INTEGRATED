@@ -1,17 +1,22 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, increaseQuantity, decreaseQuantity } from '../pages/cartSlice';
+import { removeItem, increaseQuantity, decreaseQuantity, clearCart } from '../pages/cartSlice'; // Added clearCart
 import Navbar from '../components/Navbar';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   // Handle Proceed to Checkout
   const handleProceedToCheckout = () => {
     navigate('/checkout'); // Redirect to the checkout page
+  };
+
+  // Handle Clear Cart
+  const handleClearCart = () => {
+    dispatch(clearCart()); // Dispatch action to clear all items from the cart
   };
 
   return (
@@ -35,7 +40,10 @@ const Cart = () => {
                   />
                   <div className="ms-3">
                     <h5>{item.title}</h5>
-                    <p>₹{item.price}</p>
+                    <p>₹{item.price * item.quantity}</p>
+
+                    
+
                     <div className="d-flex align-items-center">
                       <button
                         className="btn btn-outline-secondary btn-sm me-2"
@@ -68,6 +76,9 @@ const Cart = () => {
               </h4>
               <button className="btn btn-success" onClick={handleProceedToCheckout}>
                 Proceed to Checkout
+              </button>
+              <button className="btn btn-danger ms-2" onClick={handleClearCart}>
+                Clear Cart
               </button>
             </div>
           </div>

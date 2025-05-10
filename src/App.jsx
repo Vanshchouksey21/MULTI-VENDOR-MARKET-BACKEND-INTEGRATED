@@ -14,6 +14,7 @@ import Fashion from './pages/Fashion';
 import Beauty from './pages/Beauty';
 import Food from './pages/Food';
 import OrderHistory from './pages/OrderHistory';
+import Details from './pages/Details';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+         <Route path="/details/:id" element={<Details />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/OrderHistory" element={<OrderHistory />} />
         <Route path="/products/electronics" element={<Smartphone/>} />

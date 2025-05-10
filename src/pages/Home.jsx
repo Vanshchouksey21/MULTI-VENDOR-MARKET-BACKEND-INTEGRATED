@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Col, Row, Container } from 'react-bootstrap';
+import { Card, Col, Row, Container, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
 import { FaShoppingCart } from 'react-icons/fa';
@@ -14,7 +14,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-import logo from '../images/ChatGPT Image May 5, 2025, 08_11_37 PM.png';
 import fashion from "../images/ChatGPT Image May 6, 2025, 10_32_02 PM.png"
 import electronics from "../images/ChatGPT Image May 6, 2025, 10_32_05 PM.png"
 import beauty from "../images/ChatGPT Image May 6, 2025, 10_32_00 PM.png"
@@ -23,6 +22,10 @@ import vdo from "../images/2675511-hd_1920_1080_24fps.mp4"
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [sortOption, setSortOption] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
@@ -34,6 +37,7 @@ const Home = () => {
       try {
         const res = await axios.get('http://localhost:5000/products/all');
         setProducts(res.data);
+        setFilteredProducts(res.data);
       } catch (error) {
         console.error('Error fetching products', error);
       }
@@ -41,6 +45,24 @@ const Home = () => {
     fetchProducts();
     AOS.init({ duration: 1000 });
   }, []);
+
+  useEffect(() => {
+    let updatedProducts = [...products];
+
+    if (categoryFilter !== 'All') {
+      updatedProducts = updatedProducts.filter((product) =>
+        product.category.toLowerCase().includes(categoryFilter.toLowerCase().trim())
+      );
+    }
+
+    if (sortOption === 'lowToHigh') {
+      updatedProducts.sort((a, b) => a.price - b.price);
+    } else if (sortOption === 'highToLow') {
+      updatedProducts.sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(updatedProducts);
+  }, [sortOption, categoryFilter, products]);
 
   const handleAddToCart = (product) => {
     if (!isLoggedIn) {
@@ -158,11 +180,29 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Product Grid */}
+      {/* Product Grid with Filter */}
       <section id="products" style={styles.container}>
         <h2 style={styles.heading}>🛍️ Explore Our Products</h2>
+
+        {/* Filter Controls */}
+        <div className="d-flex flex-wrap justify-content-center mb-4 gap-3">
+          <Form.Select value={sortOption} onChange={(e) => setSortOption(e.target.value)} style={{ width: "200px" }}>
+            <option value="">Sort by Price</option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+          </Form.Select>
+
+          <Form.Select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} style={{ width: "200px" }}>
+            <option value="All">All Categories</option>
+            <option value=" Fashion">Fashion</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Food & Beverages">Food & Beverages</option>
+            <option value="Health & Beauty">Health & Beauty</option>
+          </Form.Select>
+        </div>
+
         <Row className="g-4">
-          {products.map((product, index) => (
+          {filteredProducts.map((product, index) => (
             <Col key={product._id} md={6} lg={4}>
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -171,16 +211,13 @@ const Home = () => {
                 whileHover={{ scale: 1.02 }}
               >
                 <Card className="shadow-lg border-0 h-100" style={styles.card}>
-                  <Card.Img
-                    variant="top"
-                    src={
-                      product.image === 'noimage.jpg'
-                        ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                        : `http://localhost:5000/uploads/${product.image}`
-                    }
-                    alt={product.title}
-                    style={styles.cardImage}
-                  />
+                 <Card.Img
+  variant="top"
+  src={product.image === 'noimage.jpg' ? 'https://via.placeholder.com/300x200.png?text=No+Image' : `http://localhost:5000/uploads/${product.image}`}
+  alt={product.title}
+  style={styles.cardImage}
+  onClick={() => navigate(`/details/${product._id}`)} // 
+/>
                   <Card.Body className="text-center d-flex flex-column">
                     <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
                     <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
@@ -247,6 +284,7 @@ const styles = {
     objectFit: 'contain',
     padding: '1rem',
     borderRadius: '10px',
+    cursor:"pointer"
   },
   categoryImg: {
     width: '180px',

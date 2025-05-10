@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Card, Col, Row } from 'react-bootstrap';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart  , FaArrowLeft} from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import vdo from "../images/853800-hd_1920_1080_25fps.mp4";
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+
 
 const Fashion = () => {
   const [products, setProducts] = useState([]);
@@ -96,20 +97,26 @@ const Fashion = () => {
 
       {/* Product Grid */}
       <section ref={productSectionRef} style={styles.container}>
+      <FaArrowLeft
+            onClick={() => navigate('/')}
+            style={{
+              cursor: 'pointer',
+              fontSize: '2.5rem',
+              color: '#4A6CF7',
+              
+            }}
+          />
         <h1 style={styles.heroTitle}>Step into Styles</h1>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} xs={12} sm={6} md={6} lg={4}>
               <Card className="shadow-sm border-0 h-100">
-                <Card.Img
+                 <Card.Img
                   variant="top"
-                  src={
-                    product.image === 'noimage.jpg'
-                      ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                      : `http://localhost:5000/uploads/${product.image}`
-                  }
+                  src={product.image === 'noimage.jpg' ? 'https://via.placeholder.com/300x200.png?text=No+Image' : `http://localhost:5000/uploads/${product.image}`}
                   alt={product.title}
-                  style={{ height: '250px', objectFit: 'contain', padding: '1rem' }}
+                  style={styles.cardImage}
+                  onClick={() => navigate(`/details/${product._id}`)} // 
                 />
                 <Card.Body className="text-center d-flex flex-column">
                   <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
@@ -192,6 +199,13 @@ const styles = {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',
     minHeight: '80vh',
+  },
+   cardImage: {
+    height: '250px',
+    objectFit: 'contain',
+    padding: '1rem',
+    borderRadius: '10px',
+    cursor:"pointer"
   },
   heroTitle: {
     fontSize: '2.5rem',

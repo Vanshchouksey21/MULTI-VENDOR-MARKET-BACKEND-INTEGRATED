@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../pages/cartSlice';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart , FaArrowLeft } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import vdo from '../images/13600721_1920_1080_30fps.mp4'; // Adjust the path as necessary
@@ -11,6 +11,9 @@ import vdo from '../images/13600721_1920_1080_30fps.mp4'; // Adjust the path as 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom'; // for navigation
+
+
+
 
 const Electronics = () => {
   const [products, setProducts] = useState([]);
@@ -93,21 +96,27 @@ const Electronics = () => {
 
       {/* Product Grid for Electronics */}
       <section style={styles.container}>
+        <FaArrowLeft
+                                    onClick={() => navigate('/')}
+                                    style={{
+                                      cursor: 'pointer',
+                                      fontSize: '2.5rem',
+                                      color: '#4A6CF7',
+                                      
+                                    }}
+                                    />
         <h2 style={styles.heading}>💻 Explore Our Electronics</h2>
         <Row className="g-4">
           {products.map((product) => (
             <Col key={product._id} md={6} lg={4}>
               <Card className="shadow-sm border-0 h-100">
                 <Card.Img
-                  variant="top"
-                  src={
-                    product.image === 'noimage.jpg'
-                      ? 'https://via.placeholder.com/300x200.png?text=No+Image'
-                      : `http://localhost:5000/uploads/${product.image}`
-                  }
-                  alt={product.title}
-                  style={{ height: '250px', objectFit: 'contain', padding: '1rem' }}
-                />
+                 variant="top"
+                 src={product.image === 'noimage.jpg' ? 'https://via.placeholder.com/300x200.png?text=No+Image' : `http://localhost:5000/uploads/${product.image}`}
+                 alt={product.title}
+                 style={styles.cardImage}
+                 onClick={() => navigate(`/details/${product._id}`)} // 
+               />
                 <Card.Body className="text-center d-flex flex-column">
                   <Card.Title className="text-dark fw-bold fs-5">{product.title}</Card.Title>
                   <Card.Text className="text-primary fw-semibold fs-6">₹{product.price}</Card.Text>
@@ -171,6 +180,13 @@ const styles = {
     padding: '50px 20px',
     backgroundColor: '#F8F9FC',
     minHeight: '80vh',
+  },
+   cardImage: {
+    height: '250px',
+    objectFit: 'contain',
+    padding: '1rem',
+    borderRadius: '10px',
+    cursor:"pointer"
   },
   heading: {
     textAlign: 'center',
