@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { FaArrowLeft } from 'react-icons/fa';
 import { clearCart } from '../pages/cartSlice';
 import Swal from 'sweetalert2';
-import Navbar from '../components/Navbar'; // ✅ Make sure the path is correct
+import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -74,33 +77,44 @@ const Checkout = () => {
 
   return (
     <>
-      <Navbar /> {/* ✅ Navbar added here */}
-      <div style={styles.container}>
-        <h2 style={styles.title}>Checkout</h2>
-        <div style={styles.summary}>
-          <h3 style={styles.sectionTitle}>Order Summary</h3>
-          {cartItems.length === 0 ? (
-            <p style={styles.empty}>Your cart is empty.</p>
-          ) : (
-            <>
-              <ul style={styles.itemList}>
-                {cartItems.map((item, index) => (
-                  <li key={index} style={styles.item}>
-                    <span>{item.title} × {item.quantity}</span>
-                    <span>₹{item.price * item.quantity}</span>
-                  </li>
-                ))}
-                <hr />
-                <li style={styles.total}>
-                  <strong>Total:</strong>
-                  <strong>₹{totalAmount}</strong>
-                </li>
-              </ul>
-              <button onClick={handlePayment} style={styles.button}>
-                Pay Now
-              </button>
-            </>
-          )}
+      <Navbar />
+      <div className="container py-5">
+        <div className="d-flex justify-content-start mb-4">
+          <FaArrowLeft
+            onClick={() => navigate('/')}
+            className="text-primary"
+            style={{ fontSize: '2.5rem', cursor: 'pointer' }}
+          />
+        </div>
+        <div className="card shadow-sm border-0 mx-auto" style={{ maxWidth: '600px' }}>
+          <div className="card-body">
+            <h2 className="text-center text-dark mb-4">Checkout</h2>
+            <div>
+              <h3 className="text-primary mb-3">Order Summary</h3>
+              {cartItems.length === 0 ? (
+                <p className="text-center text-muted">Your cart is empty.</p>
+              ) : (
+                <div>
+                  <ul className="list-group mb-3">
+                    {cartItems.map((item, index) => (
+                      <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{item.title} × {item.quantity}</span>
+                        <span>₹{item.price * item.quantity}</span>
+                      </li>
+                    ))}
+                    <hr />
+                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                      <strong>Total:</strong>
+                      <strong>₹{totalAmount}</strong>
+                    </li>
+                  </ul>
+                  <button onClick={handlePayment} className="btn btn-primary w-100 py-3">
+                    Pay Now
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -108,61 +122,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
-const styles = {
-  container: {
-    maxWidth: '600px',
-    margin: '50px auto',
-    padding: '30px',
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-    fontFamily: 'Arial, sans-serif',
-  },
-  title: {
-    fontSize: '28px',
-    marginBottom: '20px',
-    textAlign: 'center',
-    color: '#333',
-  },
-  summary: {
-    marginTop: '20px',
-  },
-  sectionTitle: {
-    fontSize: '20px',
-    marginBottom: '10px',
-    color: '#4A6CF7',
-  },
-  itemList: {
-    listStyleType: 'none',
-    padding: 0,
-    marginBottom: '20px',
-  },
-  item: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '8px 0',
-    borderBottom: '1px solid #eee',
-  },
-  total: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '18px',
-    paddingTop: '10px',
-  },
-  button: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#4A6CF7',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
-  empty: {
-    color: '#999',
-    textAlign: 'center',
-    padding: '20px',
-  },
-};

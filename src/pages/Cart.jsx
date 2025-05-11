@@ -1,8 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, increaseQuantity, decreaseQuantity, clearCart } from '../pages/cartSlice'; // Added clearCart
+import { removeItem, increaseQuantity, decreaseQuantity, clearCart } from '../pages/cartSlice'; 
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
+import Swal from 'sweetalert2'; 
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -11,75 +13,107 @@ const Cart = () => {
 
   // Handle Proceed to Checkout
   const handleProceedToCheckout = () => {
-    navigate('/checkout'); // Redirect to the checkout page
+    navigate('/checkout');
   };
 
   // Handle Clear Cart
   const handleClearCart = () => {
-    dispatch(clearCart()); // Dispatch action to clear all items from the cart
+    dispatch(clearCart());
+  };
+
+  // Handle Item Removal with confirmation
+  const handleRemoveItem = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to remove this item from the cart?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(removeItem(id));
+        Swal.fire('Removed!', 'The item has been removed from your cart.', 'success');
+      }
+    });
   };
 
   return (
     <>
-      <Navbar /> {/* Include Navbar here */}
+      <Navbar />
       <div className="container py-5">
-        <h2>Your Cart</h2>
+        <div className="mb-3">
+          <FaArrowLeft
+            onClick={() => navigate('/')}
+            className="text-primary"
+            style={{ fontSize: '1.8rem', cursor: 'pointer' }}
+          />
+        </div>
+        <h2 className="text-center mb-4 text-dark">Your Cart</h2>
+        
         {cartItems.length === 0 ? (
-          <p>Your cart is empty</p>
+          <div className="alert alert-warning text-center">
+            Your cart is empty.
+          </div>
         ) : (
           <div>
             {cartItems.map((item) => (
-              <div key={item._id} className="d-flex justify-content-between align-items-center border-bottom py-3">
-                <div className="d-flex align-items-center">
-                  <img
-                    src={item.image === 'noimage.jpg'
-                      ? 'https://via.placeholder.com/150x100.png?text=No+Image'
-                      : `http://localhost:5000/uploads/${item.image}`}
-                    alt={item.title}
-                    style={{ width: '100px', height: 'auto', objectFit: 'contain' }}
-                  />
-                  <div className="ms-3">
-                    <h5>{item.title}</h5>
-                    <p>₹{item.price * item.quantity}</p>
+              <div key={item._id} className="card mb-4 shadow-sm border-0">
+                <div className="row g-0">
+                  <div className="col-md-4">
+                    <img
+                      src={item.image === 'noimage.jpg' 
+                        ? 'https://via.placeholder.com/150x100.png?text=No+Image'
+                        : `http://localhost:5000/uploads/${item.image}`}
+                      alt={item.title}
+                      className="img-fluid rounded-start"
+                      style={{ height: '150px', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">{item.title}</h5>
+                      <p className="card-text text-muted">₹{item.price * item.quantity}</p>
 
-                    
-
-                    <div className="d-flex align-items-center">
-                      <button
-                        className="btn btn-outline-secondary btn-sm me-2"
-                        onClick={() => dispatch(decreaseQuantity(item._id))}
-                        disabled={item.quantity === 1}
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        className="btn btn-outline-secondary btn-sm ms-2"
-                        onClick={() => dispatch(increaseQuantity(item._id))}
-                        disabled={item.quantity === item.stock}
-                      >
-                        +
-                      </button>
+                      <div className="d-flex align-items-center mb-3">
+                        <button
+                          className="btn btn-outline-secondary btn-sm me-2"
+                          onClick={() => dispatch(decreaseQuantity(item._id))}
+                          disabled={item.quantity === 1}
+                        >
+                          -
+                        </button>
+                        <span className="mx-2">{item.quantity}</span>
+                        <button
+                          className="btn btn-outline-secondary btn-sm ms-2"
+                          onClick={() => dispatch(increaseQuantity(item._id))}
+                          disabled={item.quantity === item.stock}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <small className="text-muted">Available: {item.stock}</small>
                     </div>
-                    <small className="text-muted">Available: {item.stock}</small>
+                  </div>
+                  <div className="col-md-12 d-flex justify-content-end align-items-center p-3">
+                    <button className="btn btn-danger" onClick={() => handleRemoveItem(item._id)}>
+                      Remove
+                    </button>
                   </div>
                 </div>
-                <button className="btn btn-danger" onClick={() => dispatch(removeItem(item._id))}>
-                  Remove
-                </button>
               </div>
             ))}
-            <div className="mt-4">
-              <h4>
-                Total: ₹
-                {cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
-              </h4>
-              <button className="btn btn-success" onClick={handleProceedToCheckout}>
-                Proceed to Checkout
-              </button>
-              <button className="btn btn-danger ms-2" onClick={handleClearCart}>
-                Clear Cart
-              </button>
+            <div className="d-flex justify-content-between align-items-center mt-4">
+              <h4>Total: ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</h4>
+              <div>
+                <button className="btn btn-success me-2" onClick={handleProceedToCheckout}>
+                  Proceed to Checkout
+                </button>
+                <button className="btn btn-danger" onClick={handleClearCart}>
+                  Clear Cart
+                </button>
+              </div>
             </div>
           </div>
         )}

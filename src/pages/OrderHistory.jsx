@@ -1,67 +1,82 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-const OrderHistory = () => {
+const OrderHistory = ({ buyerId }) => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOrderHistory = async () => {
+    const fetchOrders = async () => {
       try {
-        const response = await axios.get('/api/orders/history', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        setOrders(response.data.orders);
-      } catch (err) {
-        setError('Could not fetch order history');
-        console.error('Error fetching orders:', err);
-      } finally {
-        setLoading(false);
+        const response = await axios.get(`http://localhost:5000/api/orders1/history/${buyerId}`);
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        Swal.fire('Error', 'Failed to fetch order history.', 'error');
       }
     };
 
-    fetchOrderHistory();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+    fetchOrders();
+  }, [buyerId]);
 
   return (
-    <div className="order-history-container">
-      <h2>Your Order History</h2>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Order History</h2>
       {orders.length === 0 ? (
-        <p>You have not placed any orders yet.</p>
+        <p>No orders placed yet.</p>
       ) : (
-        <div className="orders-list">
-          {orders.map((order) => (
-            <div className="order-card" key={order._id}>
-              <h3>Order ID: {order._id}</h3>
-              <p><strong>Order Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
-              <p><strong>Items:</strong></p>
-              <ul>
-                {order.items.map((item, index) => (
-                  <li key={index}>
-                    <strong>{item.title}</strong> - {item.quantity} x ${item.price}
-                  </li>
-                ))}
-              </ul>
-              <p><strong>Total:</strong> ${order.items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</p>
-            </div>
+        <ul style={styles.orderList}>
+          {orders.map((order, index) => (
+            <li key={index} style={styles.orderItem}>
+              <div>
+                <strong>Order ID:</strong> {order._id}
+              </div>
+              <div>
+                <strong>Status:</strong> {order.status}
+              </div>
+              <div>
+                <strong>Total:</strong> ₹{order.totalAmount}
+              </div>
+              <div>
+                <strong>Products:</strong>
+                <ul>
+                  {order.products.map((item, index) => (
+                    <li key={index}>
+                      {item.product.title} × {item.quantity} - ₹{item.price * item.quantity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    maxWidth: '800px',
+    margin: '50px auto',
+    padding: '20px',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    fontSize: '28px',
+    marginBottom: '20px',
+    textAlign: 'center',
+  },
+  orderList: {
+    listStyleType: 'none',
+    padding: 0,
+  },
+  orderItem: {
+    padding: '10px 0',
+    borderBottom: '1px solid #ddd',
+  },
 };
 
 export default OrderHistory;
