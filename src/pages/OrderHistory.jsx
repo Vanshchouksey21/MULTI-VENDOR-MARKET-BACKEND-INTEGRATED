@@ -1,82 +1,75 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
-const OrderHistory = ({ buyerId }) => {
+const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const user = JSON.parse(localStorage.getItem('user')); // assumes user info is stored in localStorage
+  const token = localStorage.getItem('token'); // JWT token
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/orders1/history/${buyerId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/orders/user/${user._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setOrders(response.data);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-        Swal.fire('Error', 'Failed to fetch order history.', 'error');
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch orders');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchOrders();
-  }, [buyerId]);
+    if (user && token) {
+      fetchOrders();
+    } else {
+      setError('Please log in to view order history.');
+      setLoading(false);
+    }
+  }, [user, token]);
+
+  if (loading) return <div className="text-center mt-4">Loading orders...</div>;
+  if (error) return <div className="text-danger text-center mt-4">{error}</div>;
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Order History</h2>
+    <div className="container mt-4">
+      <h2 className="mb-4">Order History</h2>
       {orders.length === 0 ? (
-        <p>No orders placed yet.</p>
+        <div>No orders found.</div>
       ) : (
-        <ul style={styles.orderList}>
-          {orders.map((order, index) => (
-            <li key={index} style={styles.orderItem}>
-              <div>
-                <strong>Order ID:</strong> {order._id}
-              </div>
-              <div>
-                <strong>Status:</strong> {order.status}
-              </div>
-              <div>
-                <strong>Total:</strong> ₹{order.totalAmount}
-              </div>
-              <div>
-                <strong>Products:</strong>
-                <ul>
-                  {order.products.map((item, index) => (
-                    <li key={index}>
-                      {item.product.title} × {item.quantity} - ₹{item.price * item.quantity}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </li>
-          ))}
-        </ul>
+        orders.map((order) => (
+          <div key={order._id} className="card mb-3">
+            <div className="card-body">
+              <h5>Order ID: {order._id}</h5>
+              <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+              <p><strong>Status:</strong> {order.status}</p>
+              <p><strong>Total:</strong> ₹{order.totalAmount}</p>
+              <p><strong>Payment:</strong> {order.paymentMethod}</p>
+              <p><strong>Shipping:</strong> {order.shippingAddress}</p>
+              <hr />
+              <h6>Products:</h6>
+              <ul>
+                {order.products.map((item, index) => (
+                  <li key={index}>
+                    {item.title} - ₹{item.price} × {item.quantity}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
       )}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: '800px',
-    margin: '50px auto',
-    padding: '20px',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: '28px',
-    marginBottom: '20px',
-    textAlign: 'center',
-  },
-  orderList: {
-    listStyleType: 'none',
-    padding: 0,
-  },
-  orderItem: {
-    padding: '10px 0',
-    borderBottom: '1px solid #ddd',
-  },
 };
 
 export default OrderHistory;

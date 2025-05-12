@@ -27,6 +27,9 @@ const Navbar = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userrole');
+    localStorage.removeItem('user');
+localStorage.removeItem('token');
+
     navigate('/login');
   };
 

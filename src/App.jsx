@@ -15,6 +15,9 @@ import Beauty from './pages/Beauty';
 import Food from './pages/Food';
 import OrderHistory from './pages/OrderHistory';
 import Details from './pages/Details';
+import Dashboard from './Admin/Dashboard';
+import User from './Admin/user';
+import Products from './Admin/Products';
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/products/Food" element={<Food />} /> 
+        <Route path="/admin" element={<Dashboard />} /> 
+        <Route path="/users" element={<User />} /> 
+        <Route path="/products" element={<Products />} /> 
         
         
       

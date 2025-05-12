@@ -22,6 +22,9 @@ const Login = () => {
       localStorage.setItem('userId', userId);
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userrole', role);
+      localStorage.setItem('user', JSON.stringify(userData));
+localStorage.setItem('token', jwtToken);
+
       
 
       // Navigate based on role
