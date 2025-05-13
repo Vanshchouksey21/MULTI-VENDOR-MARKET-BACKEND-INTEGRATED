@@ -5,7 +5,7 @@ import ProductDetails from './pages/ProductDetail';
 import Register from './pages/Register';
 import SellerDashboard from './pages/SellerDashboard';
 import CartPage from './pages/Cart';
-import BuyerDashboard from './pages/BuyerDashboard';
+
 import Smartphone from './pages/Smartphone';
 import Checkout from './pages/Checkout';
 import SearchResults from './pages/SearchResults';
@@ -13,7 +13,7 @@ import SearchResults from './pages/SearchResults';
 import Fashion from './pages/Fashion';
 import Beauty from './pages/Beauty';
 import Food from './pages/Food';
-import OrderHistory from './pages/OrderHistory';
+
 import Details from './pages/Details';
 import Dashboard from './Admin/Dashboard';
 import User from './Admin/user';
@@ -31,7 +31,7 @@ function App() {
         <Route path="/register" element={<Register />} />
          <Route path="/details/:id" element={<Details />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/OrderHistory" element={<OrderHistory />} />
+      
         <Route path="/products/electronics" element={<Smartphone/>} />
         <Route path="/products/fashion" element={<Fashion/>} />
         <Route path="/products/Beauty" element={<Beauty/>} />

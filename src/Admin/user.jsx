@@ -7,12 +7,10 @@ import { toast } from 'react-toastify'; // Import Toastify
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/admin/users')
-      .then(res => {
-        setUsers(res.data);
-      })
-      .catch(err => console.error('Error fetching users:', err));
+  useEffect(async() => {
+    const res = await axios.get('http://localhost:5000/admin/users')
+    setUsers(res?.data);
+    console.log(res?.data);
   }, []);
 
   // Delete user function

@@ -102,7 +102,7 @@ localStorage.removeItem('token');
                 <ul className="dropdown-menu dropdown-menu-end animate-slide">
                   {role === 'buyer' ? (
                     <>
-                      <li><Link className="dropdown-item" to="/OrderHistory">Order History</Link></li>
+                     
                       <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
                     </>
                   ) : (

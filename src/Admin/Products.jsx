@@ -1,4 +1,3 @@
-// src/pages/ProductsPage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
@@ -9,15 +8,16 @@ const ProductsPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/admin/products')
-      .then(res => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/admin/products');
         setProducts(res.data);
-        setError(null);
-      })
-      .catch(err => {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-      });
+      } catch (err) {
+        setError('Failed to fetch products');
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const handleDelete = (productId) => {
@@ -45,7 +45,6 @@ const ProductsPage = () => {
   return (
     <Container>
       <h2 className="text-center my-4">Products List</h2>
-
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Row>
@@ -57,21 +56,14 @@ const ProductsPage = () => {
                 <p>{product.category}</p>
               </Card.Header>
               <Card.Body>
-                <Card.Text>
-                  <strong>Price:</strong> ${product.price}
-                </Card.Text>
-                <Card.Text>
-                  <strong>Stock:</strong> {product.stock} in stock
-                </Card.Text>
-                <Card.Text>
-                  <strong>Seller:</strong> {product.seller.name}
-                </Card.Text>
+                <Card.Text><strong>Price:</strong> ${product.price}</Card.Text>
+                <Card.Text><strong>Stock:</strong> {product.stock} in stock</Card.Text>
+                <Card.Text><strong>Seller:</strong> {product.seller?.name || 'Unknown'}</Card.Text>
               </Card.Body>
               <Card.Footer className="text-center">
                 <Button
                   variant="danger"
                   size="sm"
-                  className="ml-2"
                   onClick={() => handleDelete(product._id)}
                 >
                   Delete

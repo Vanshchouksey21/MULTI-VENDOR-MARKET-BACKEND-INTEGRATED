@@ -14,33 +14,25 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
 
-      const { role, token, message, userId } = response.data;
+      const { token, user, message } = response.data;
       setMessage(message);
 
-      // ✅ Save token and userId to localStorage
+      // ✅ Save user and token in localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userrole', role);
-      localStorage.setItem('user', JSON.stringify(userData));
-localStorage.setItem('token', jwtToken);
-
-      
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('userId', user._id);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userrole', user.role);
 
       // Navigate based on role
-      if (role === 'buyer') {
+      if (user.role === 'buyer') {
         navigate('/home');
-      } else if (role === 'seller') {
-        navigate('/seller-dashboard'); const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-
-      const { role, token, message, userId } = response.data;
-      setMessage(message);
-
-      // ✅ Save token and userId to localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-
+      } else if (user.role === 'seller') {
+        navigate('/seller-dashboard');
+      } else {
+        navigate('/');
       }
+
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
     }
