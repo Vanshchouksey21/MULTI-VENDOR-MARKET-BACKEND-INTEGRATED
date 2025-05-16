@@ -18,6 +18,7 @@ import Details from './pages/Details';
 import Dashboard from './Admin/Dashboard';
 import User from './Admin/user';
 import Products from './Admin/Products';
+import Forgotpassword from './pages/Forgotpassword';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/admin" element={<Dashboard />} /> 
         <Route path="/users" element={<User />} /> 
         <Route path="/products" element={<Products />} /> 
+        <Route path="/forgotpassword" element={<Forgotpassword />} /> 
         
         
       

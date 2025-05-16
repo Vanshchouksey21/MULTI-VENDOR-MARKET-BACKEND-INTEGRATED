@@ -58,6 +58,12 @@ const Login = () => {
           style={styles.input}
           required
         />
+
+        {/* Forgot Password Link */}
+        <Link to="/forgotpassword" style={styles.forgotPassword}>
+          Forgot Password?
+        </Link>
+
         <button type="submit" style={styles.button}>Login</button>
       </form>
       {message && <p style={styles.message}>{message}</p>}
@@ -71,7 +77,7 @@ const Login = () => {
 
 export default Login;
 
-// CSS
+// CSS-in-JS Styles
 const styles = {
   container: {
     minHeight: '80vh',
@@ -98,10 +104,18 @@ const styles = {
   },
   input: {
     padding: '12px',
-    marginBottom: '15px',
+    marginBottom: '10px',
     borderRadius: '6px',
     border: '1px solid #ccc',
     fontSize: '16px',
+  },
+  forgotPassword: {
+    fontSize: '14px',
+    color: '#4A6CF7',
+    textAlign: 'right',
+    marginBottom: '15px',
+    textDecoration: 'none',
+    cursor: 'pointer',
   },
   button: {
     backgroundColor: '#4A6CF7',
