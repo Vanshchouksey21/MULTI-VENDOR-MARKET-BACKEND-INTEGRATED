@@ -47,23 +47,18 @@ const Details = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    const existingItem = cartItems.find((item) => item._id === product._id);
-    
-    if (existingItem) {
-      // Show toast if item is already in the cart
-      toast.warning('This product is already in your cart!', { position: 'top-right' });
-    } else {
-      const totalDesired = (existingItem?.quantity || 0) + quantity;
+ const handleAddToCart = () => {
+  const existingItem = cartItems.find((item) => item._id === product._id);
+  const totalDesired = (existingItem?.quantity || 0) + quantity;
 
-      if (totalDesired > product.stock) {
-        toast.error(`Only ${product.stock} items in stock.`, { position: 'top-right' });
-      } else {
-        dispatch(addItem({ ...product, quantity }));
-        toast.success(`${quantity} item(s) added to cart!`, { position: 'top-right' });
-      }
-    }
-  };
+  if (totalDesired > product.stock) {
+    toast.error(`Only ${product.stock} items in stock.`, { position: 'top-right' });
+  } else {
+    dispatch(addItem({ ...product, quantity }));
+    toast.success(`${quantity} item(s) added to cart!`, { position: 'top-right' });
+  }
+};
+
 
   return (
     <>

@@ -10,10 +10,17 @@ const cartSlice = createSlice({
     items: initialCart,
   },
   reducers: {
-    addItem: (state, action) => {
-      state.items.push({ ...action.payload, quantity: 1 });
-      saveCart(state.items);
-    },
+addItem: (state, action) => {
+  const existingItem = state.items.find(item => item._id === action.payload._id);
+  if (existingItem) {
+    const newQuantity = existingItem.quantity + action.payload.quantity;
+    existingItem.quantity = newQuantity > existingItem.stock ? existingItem.stock : newQuantity;
+  } else {
+    state.items.push({ ...action.payload ,  quantity: 1 });
+  }
+  saveCart(state.items);
+},
+
     removeItem: (state, action) => {
       state.items = state.items.filter(item => item._id !== action.payload);
       saveCart(state.items);
