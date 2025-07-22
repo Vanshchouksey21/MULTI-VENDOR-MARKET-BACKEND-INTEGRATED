@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaArrowLeft } from 'react-icons/fa';
-import { clearCart } from '../pages/cartSlice';
+import { clearCart, removeItem } from '../pages/CartSlice';
 import Swal from 'sweetalert2';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
@@ -49,6 +49,7 @@ const Checkout = () => {
             if (verifyResponse.data.message === 'Payment verified successfully') {
               Swal.fire('Success', 'Payment Successful!', 'success');
               dispatch(clearCart());
+              navigate('/'); // redirect to homepage after payment
             } else {
               Swal.fire('Verification Failed', 'Invalid payment signature.', 'error');
             }
@@ -81,7 +82,7 @@ const Checkout = () => {
       <div className="container py-5">
         <div className="d-flex justify-content-start mb-4">
           <FaArrowLeft
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/cart')}
             className="text-primary"
             style={{ fontSize: '2.5rem', cursor: 'pointer' }}
           />
@@ -97,8 +98,19 @@ const Checkout = () => {
                 <div>
                   <ul className="list-group mb-3">
                     {cartItems.map((item, index) => (
-                      <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{item.title} × {item.quantity}</span>
+                      <li
+                        key={item._id}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span>{item.title} × {item.quantity}</span><br />
+                          <button
+                            onClick={() => dispatch(removeItem(item._id))}
+                            className="btn btn-sm btn-outline-danger mt-1"
+                          >
+                            Remove
+                          </button>
+                        </div>
                         <span>₹{item.price * item.quantity}</span>
                       </li>
                     ))}

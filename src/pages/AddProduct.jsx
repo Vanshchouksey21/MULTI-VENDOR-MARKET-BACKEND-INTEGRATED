@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import {  FaArrowLeft } from 'react-icons/fa';
+
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
@@ -48,6 +53,15 @@ const AddProduct = () => {
 
   return (
     <div style={styles.container}>
+           <FaArrowLeft
+                                              onClick={() => navigate('/')}
+                                              style={{
+                                                cursor: 'pointer',
+                                                fontSize: '2.5rem',
+                                                color: '#4A6CF7',
+                                                
+                                              }}
+                                              />  
       <h3 style={styles.heading}>Add New Product</h3>
       <form onSubmit={handleSubmit} style={styles.form}>
 

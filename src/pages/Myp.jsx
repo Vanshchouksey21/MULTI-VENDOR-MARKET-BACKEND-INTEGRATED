@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Col, Row, Button, Modal, Form, Container } from 'react-bootstrap';
+import { FaArrowLeft } from 'react-icons/fa';
+
+import { useNavigate } from 'react-router-dom';
 
 const Myp = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -95,6 +99,16 @@ const Myp = () => {
 
   return (
     <Container className="py-4">
+        <FaArrowLeft
+                                              onClick={() => navigate('/')}
+                                              style={{
+                                                cursor: 'pointer',
+                                                fontSize: '2.5rem',
+                                                color: '#4A6CF7',
+                                                
+                                              }}
+                                              />
+      
       <h3 className="mb-4 text-center text-primary fw-bold">My Products</h3>
       <Row className="g-4">
         {products.map((product) => (
